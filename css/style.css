@@ -210,6 +210,34 @@ div.count-text{
 	}
 }
 
+.social-link{
+	background-color: rgba(13, 28, 29, .5);
+	color:#f5f5f7;
+	padding: .8rem .5rem;
+	border-radius: 10px;
+	display:flex;
+	justify-content: center;
+	align-items: center;
+	gap:1rem;
+	margin: 0 5em;
+	text-transform: uppercase;
+	font-weight: bold;
+}
+
+.social-link:hover{
+	background-color: rgba(13, 28, 29, .7);
+	transition: 1s;
+}
+
+.profile-card-actions .orange{
+	background:linear-gradient(45deg, #d5135a, #f05924);
+	box-shadow: 0 4px 30px rgba(223, 45, 70, 0.75);
+}
+
+.profile-card-actions .orange:hover{
+	box-shadow: 0 7px 30px rgba(223, 45, 70, 0.75);
+}
+
 .profile-card-actions .blue{
 	background:linear-gradient(45deg, #1da1f2, #0e71c8);
 	box-shadow: 0 4px 30px rgba(19, 127, 212, .4);
