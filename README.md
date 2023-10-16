@@ -1,5 +1,5 @@
 # tusharsaxena01.github.io
 ---
-## Contact Profile Card
+## Personal Portfolio Website
 
 Site: [View Deployed Site](https://tusharsaxena01.github.io/)
