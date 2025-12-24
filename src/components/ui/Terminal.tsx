@@ -54,7 +54,7 @@ export const Terminal: React.FC<TerminalProps> = ({
                 <div className="h-3 w-3 rounded-full bg-red-500/80" />
                 <div className="h-3 w-3 rounded-full bg-yellow-500/80" />
                 <div className="h-3 w-3 rounded-full bg-green-500/80" />
-                <span className="ml-2 text-xs text-slate-500">guest@tranzita-systems:~</span>
+                <span className="ml-2 text-xs text-slate-500">abhi@portfolio:~</span>
             </div>
 
             <div className="space-y-2 text-slate-300">

@@ -53,7 +53,7 @@ export const Hero = () => {
             <div className="flex-1 space-y-8 z-10 text-center lg:text-left">
                 <h1 ref={headlineRef} className="text-4xl sm:text-5xl lg:text-7xl font-bold tracking-tight text-white">
                     <span className="block text-slate-400 text-xl lg:text-3xl font-mono mb-2">&gt; HELLO_WORLD</span>
-                    I am <span className="text-sky-400">Tushar Saxena</span>.
+                    I am <span className="text-sky-400">Abhi Saxena</span>.
                 </h1>
 
                 <p ref={subheadlineRef} className="text-lg lg:text-2xl text-slate-400 max-w-2xl mx-auto lg:mx-0">

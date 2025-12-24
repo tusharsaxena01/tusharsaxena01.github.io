@@ -11,6 +11,7 @@ import { Contact } from "@/components/sections/Contact";
 import { Footer } from "@/components/sections/Footer";
 import { useKeyboard } from "@/hooks/useKeyboard";
 import { CustomCursor } from "@/components/ui/CustomCursor";
+import { BackToTop } from "@/components/ui/BackToTop";
 
 export default function Home() {
   useKeyboard();
@@ -18,6 +19,7 @@ export default function Home() {
   return (
     <main className="min-h-screen relative flex flex-col font-sans text-gray-200">
       <CustomCursor />
+      <BackToTop />
       <GridBackground />
       <Navbar />
 

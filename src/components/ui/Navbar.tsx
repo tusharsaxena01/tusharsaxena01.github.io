@@ -50,7 +50,7 @@ export const Navbar = () => {
         >
             <div className="container mx-auto px-6 flex items-center justify-between">
                 <div className="font-mono font-bold text-xl tracking-tighter text-sky-400 z-50 relative">
-                    &lt;TS /&gt;
+                    &lt;AS /&gt;
                 </div>
 
                 {/* Desktop Menu */}
