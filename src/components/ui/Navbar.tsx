@@ -61,7 +61,7 @@ export const Navbar = () => {
                                 href={item.href}
                                 className="group flex items-center gap-2 text-sm font-medium text-slate-400 hover:text-white transition-colors"
                             >
-                                <span className="text-sky-500 opacity-0 group-hover:opacity-100 transition-opacity font-mono text-xs">
+                                <span className="text-sky-500 opacity-100 group-hover:opacity-0 transition-opacity font-mono text-xs">
                                     [{item.key}]
                                 </span>
                                 {item.name}
