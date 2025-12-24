@@ -1,0 +1,107 @@
+"use client";
+
+import React, { useEffect, useRef } from "react";
+import gsap from "gsap";
+import { Terminal } from "../ui/Terminal";
+import Atropos from "atropos/react";
+import "atropos/css";
+
+export const Hero = () => {
+    const containerRef = useRef<HTMLDivElement>(null);
+    const headlineRef = useRef<HTMLHeadingElement>(null);
+    const subheadlineRef = useRef<HTMLParagraphElement>(null);
+
+    useEffect(() => {
+        const ctx = gsap.context(() => {
+            const tl = gsap.timeline();
+
+            tl.from(headlineRef.current, {
+                y: 100,
+                opacity: 0,
+                duration: 1,
+                ease: "power4.out",
+            })
+                .from(subheadlineRef.current, {
+                    y: 50,
+                    opacity: 0,
+                    duration: 1,
+                    delay: -0.5,
+                    ease: "power3.out",
+                })
+                .from(".hero-cta", {
+                    scale: 0.8,
+                    opacity: 0,
+                    duration: 0.8,
+                    stagger: 0.2,
+                    ease: "back.out(1.7)",
+                }, "-=0.5")
+                .from(".hero-terminal", {
+                    y: 50,
+                    opacity: 0,
+                    duration: 1,
+                    ease: "power2.out",
+                }, "-=0.5");
+
+        }, containerRef);
+
+        return () => ctx.revert();
+    }, []);
+
+    return (
+        <section ref={containerRef} className="relative min-h-screen flex flex-col lg:flex-row items-center justify-center lg:justify-between px-6 lg:px-20 py-20 gap-10">
+
+            <div className="flex-1 space-y-8 z-10 text-center lg:text-left">
+                <h1 ref={headlineRef} className="text-4xl sm:text-5xl lg:text-7xl font-bold tracking-tight text-white">
+                    <span className="block text-slate-400 text-xl lg:text-3xl font-mono mb-2">&gt; HELLO_WORLD</span>
+                    I am <span className="text-sky-400">Tushar Saxena</span>.
+                </h1>
+
+                <p ref={subheadlineRef} className="text-lg lg:text-2xl text-slate-400 max-w-2xl mx-auto lg:mx-0">
+                    Full Stack Software Developer at <span className="text-white font-semibold">Tranzita Systems</span>.
+                    <br />
+                    Building high-performance systems with precision.
+                </p>
+
+                <div className="flex flex-wrap gap-4 justify-center lg:justify-start">
+                    <Atropos
+                        activeOffset={40}
+                        shadowScale={1.05}
+                        className="hero-cta"
+                    >
+                        <a href="#projects" className="px-8 py-3 bg-sky-600 hover:bg-sky-500 text-white font-bold rounded-lg transition-all shadow-lg shadow-sky-500/20 block border border-sky-400/50">
+                            View Projects
+                        </a>
+                    </Atropos>
+
+                    <Atropos
+                        activeOffset={40}
+                        shadowScale={1.05}
+                        className="hero-cta"
+                    >
+                        <a href="#contact" className="px-8 py-3 bg-slate-800 hover:bg-slate-700 text-white font-bold rounded-lg transition-all border border-slate-700 block text-center">
+                            Contact Me
+                        </a>
+                    </Atropos>
+                </div>
+            </div>
+
+            <div className="flex-1 w-full max-w-lg lg:max-w-xl hero-terminal z-10">
+                <Atropos
+                    activeOffset={20}
+                    shadow={false}
+                >
+                    <Terminal
+                        initialMessage={[
+                            "Loading developer profile...",
+                            "Fetching skills from database...",
+                            "Optimizing performance...",
+                            "Ready."
+                        ]}
+                        className="w-full h-[300px] lg:h-[400px]"
+                    />
+                </Atropos>
+            </div>
+
+        </section>
+    );
+};
