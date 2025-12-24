@@ -25,7 +25,7 @@ export const Contact = () => {
     }, [status]);
 
     return (
-        <section id="contact" ref={container} className="py-20 px-6 lg:px-20 max-w-4xl mx-auto text-center">
+        <section id="contact" ref={container} className="py-6 px-6 lg:px-20 max-w-4xl mx-auto text-center">
             <div className="mb-12">
                 <p className="text-sky-500 font-mono mb-4">05. What's Next?</p>
                 <h2 className="text-4xl lg:text-5xl font-bold text-white mb-6">Get In Touch</h2>
@@ -59,9 +59,9 @@ export const Contact = () => {
                 </div>
             )}
 
-            <div className="mt-20">
-                <a href="mailto:tushar@tranzita.com" className="font-mono text-slate-500 hover:text-sky-400 transition-colors">
-                    tushar@tranzita.com
+            <div className="my-10">
+                <a href="mailto:saxena.abhi7007@gmail.com" className="font-mono text-slate-500 hover:text-sky-400 transition-colors">
+                    saxena.abhi7007@gmail.com
                 </a>
             </div>
         </section>

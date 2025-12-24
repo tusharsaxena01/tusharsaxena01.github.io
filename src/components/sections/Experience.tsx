@@ -41,11 +41,11 @@ export const Experience = () => {
         });
 
         tl.from(".exp-title", {
-            y: 50, opacity: 0, duration: 0.8, ease: "power3.out"
+            y: 50, opacity: 0, duration: 0.5, ease: "power3.out", clearProps: "all"
         })
             .from(".exp-item", {
-                x: -50, opacity: 0, duration: 0.8, stagger: 0.3, ease: "power2.out"
-            }, "-=0.4");
+                x: -50, opacity: 0, duration: 0.5, stagger: 0.15, ease: "power2.out", clearProps: "all"
+            }, "-=0.3");
 
     }, { scope: container });
 

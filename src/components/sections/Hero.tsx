@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useEffect, useRef } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import gsap from "gsap";
 import { Terminal } from "../ui/Terminal";
 import Atropos from "atropos/react";
@@ -10,6 +10,7 @@ export const Hero = () => {
     const containerRef = useRef<HTMLDivElement>(null);
     const headlineRef = useRef<HTMLHeadingElement>(null);
     const subheadlineRef = useRef<HTMLParagraphElement>(null);
+    const [isTerminalModalOpen, setIsTerminalModalOpen] = useState(false);
 
     useEffect(() => {
         const ctx = gsap.context(() => {
@@ -34,6 +35,7 @@ export const Hero = () => {
                     duration: 0.8,
                     stagger: 0.2,
                     ease: "back.out(1.7)",
+                    clearProps: "all",
                 }, "-=0.5")
                 .from(".hero-terminal", {
                     y: 50,
@@ -46,6 +48,11 @@ export const Hero = () => {
 
         return () => ctx.revert();
     }, []);
+
+    const handleTerminalClick = (e: React.MouseEvent) => {
+        e.preventDefault();
+        setIsTerminalModalOpen(true);
+    };
 
     return (
         <section ref={containerRef} className="relative min-h-screen flex flex-col lg:flex-row items-center justify-center lg:justify-between px-6 lg:px-20 py-20 gap-10">
@@ -63,44 +70,52 @@ export const Hero = () => {
                 </p>
 
                 <div className="flex flex-wrap gap-4 justify-center lg:justify-start">
-                    <Atropos
-                        activeOffset={40}
-                        shadowScale={1.05}
-                        className="hero-cta"
+                    <a
+                        href="#projects"
+                        className="hero-cta opacity-100 px-8 py-3 bg-sky-600 hover:bg-sky-500 text-white font-bold rounded-lg transition-all shadow-lg shadow-sky-500/20 border border-sky-400/50 hover:scale-105 active:scale-95"
                     >
-                        <a href="#projects" className="px-8 py-3 bg-sky-600 hover:bg-sky-500 text-white font-bold rounded-lg transition-all shadow-lg shadow-sky-500/20 block border border-sky-400/50">
-                            View Projects
-                        </a>
-                    </Atropos>
+                        View Projects
+                    </a>
 
-                    <Atropos
-                        activeOffset={40}
-                        shadowScale={1.05}
-                        className="hero-cta"
+                    <a
+                        href="#contact"
+                        className="hero-cta opacity-100 px-8 py-3 bg-slate-800 hover:bg-slate-700 text-white font-bold rounded-lg transition-all border border-slate-700 hover:scale-105 active:scale-95"
                     >
-                        <a href="#contact" className="px-8 py-3 bg-slate-800 hover:bg-slate-700 text-white font-bold rounded-lg transition-all border border-slate-700 block text-center">
-                            Contact Me
-                        </a>
-                    </Atropos>
+                        Contact Me
+                    </a>
                 </div>
             </div>
 
-            <div className="flex-1 w-full max-w-lg lg:max-w-xl hero-terminal z-10">
+            <div className="flex-1 w-full max-w-lg lg:max-w-xl hero-terminal z-10" onClick={handleTerminalClick}>
                 <Atropos
                     activeOffset={20}
                     shadow={false}
                 >
-                    <Terminal
-                        initialMessage={[
-                            "Loading developer profile...",
-                            "Fetching skills from database...",
-                            "Optimizing performance...",
-                            "Ready."
-                        ]}
-                        className="w-full h-[300px] lg:h-[400px]"
-                    />
+                    <div className="cursor-pointer">
+                        <Terminal
+                            initialMessage={[
+                                "Loading developer profile...",
+                                "Fetching skills from database...",
+                                "Optimizing performance...",
+                                "Ready."
+                            ]}
+                            className="w-full h-[300px] lg:h-[400px]"
+                        />
+                    </div>
                 </Atropos>
             </div>
+
+            {/* Terminal Modal */}
+            {isTerminalModalOpen && (
+                <Terminal
+                    initialMessage={[
+                        "Welcome to my interactive terminal!",
+                        "Type 'help' to see available commands.",
+                    ]}
+                    isModalOpen={true}
+                    onClose={() => setIsTerminalModalOpen(false)}
+                />
+            )}
 
         </section>
     );

@@ -9,7 +9,7 @@ const jetbrainsMono = JetBrains_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Tushar Saxena | Full Stack Developer",
+  title: "Abhi Saxena | Full Stack Developer",
   description: "Systems over Interfaces. Performance is a feature.",
 };
 

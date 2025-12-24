@@ -12,6 +12,8 @@ interface TerminalLine {
 interface TerminalProps {
     initialMessage?: string[];
     className?: string;
+    isModalOpen?: boolean;
+    onClose?: () => void;
 }
 
 const commands: Record<string, () => string | string[]> = {
@@ -26,6 +28,7 @@ const commands: Record<string, () => string | string[]> = {
         "  clear      - Clear the terminal",
         "  date       - Show current date and time",
         "  whoami     - Display user information",
+        "  exit       - Close the terminal modal",
     ],
     about: () => [
         "Hi! I'm Abhi Saxena, a passionate Full Stack Developer.",
@@ -66,6 +69,8 @@ const commands: Record<string, () => string | string[]> = {
 export const Terminal: React.FC<TerminalProps> = ({
     initialMessage = ["Welcome to my interactive terminal!", "Type 'help' to see available commands."],
     className,
+    isModalOpen = false,
+    onClose,
 }) => {
     const containerRef = useRef<HTMLDivElement>(null);
     const inputRef = useRef<HTMLInputElement>(null);
@@ -78,6 +83,9 @@ export const Terminal: React.FC<TerminalProps> = ({
     const [isActive, setIsActive] = useState(false);
 
     useEffect(() => {
+        // Only run once on mount to prevent messages from repeating
+        if (history.length > 0) return;
+
         let ctx = gsap.context(() => {
             const tl = gsap.timeline({
                 onComplete: () => setIsInitialized(true),
@@ -94,7 +102,7 @@ export const Terminal: React.FC<TerminalProps> = ({
         }, containerRef);
 
         return () => ctx.revert();
-    }, [initialMessage]);
+    }, []); // Empty dependency array to run only once
 
     useEffect(() => {
         if (outputRef.current) {
@@ -102,23 +110,27 @@ export const Terminal: React.FC<TerminalProps> = ({
         }
     }, [history]);
 
-    // Handle ESC key to deactivate terminal
+    // Handle ESC key to deactivate terminal or close modal
     useEffect(() => {
         const handleEscape = (e: globalThis.KeyboardEvent) => {
-            if (e.key === "Escape" && isActive) {
-                setIsActive(false);
-                setCurrentInput("");
+            if (e.key === "Escape") {
+                if (isModalOpen && onClose) {
+                    onClose();
+                } else if (isActive) {
+                    setIsActive(false);
+                    setCurrentInput("");
+                }
             }
         };
 
         window.addEventListener("keydown", handleEscape);
         return () => window.removeEventListener("keydown", handleEscape);
-    }, [isActive]);
+    }, [isActive, isModalOpen, onClose]);
 
-    // Handle click outside to deactivate terminal
+    // Handle click outside to deactivate terminal (only when not in modal mode)
     useEffect(() => {
         const handleClickOutside = (e: globalThis.MouseEvent) => {
-            if (containerRef.current && !containerRef.current.contains(e.target as Node) && isActive) {
+            if (!isModalOpen && containerRef.current && !containerRef.current.contains(e.target as Node) && isActive) {
                 setIsActive(false);
                 setCurrentInput("");
             }
@@ -126,7 +138,7 @@ export const Terminal: React.FC<TerminalProps> = ({
 
         document.addEventListener("mousedown", handleClickOutside);
         return () => document.removeEventListener("mousedown", handleClickOutside);
-    }, [isActive]);
+    }, [isActive, isModalOpen]);
 
     const executeCommand = (cmd: string) => {
         const trimmedCmd = cmd.trim().toLowerCase();
@@ -139,6 +151,19 @@ export const Terminal: React.FC<TerminalProps> = ({
 
         if (trimmedCmd === "clear") {
             setHistory([]);
+            return;
+        }
+
+        // Handle exit command to close modal
+        if (trimmedCmd === "exit") {
+            if (isModalOpen && onClose) {
+                onClose();
+            } else {
+                setHistory(prev => [...prev, {
+                    type: 'output',
+                    content: "Exit command only works in modal mode."
+                }]);
+            }
             return;
         }
 
@@ -198,40 +223,67 @@ export const Terminal: React.FC<TerminalProps> = ({
         }, 0);
     };
 
-    return (
+    const handleClose = (e: React.MouseEvent) => {
+        e.stopPropagation();
+        if (onClose) {
+            onClose();
+        }
+    };
+
+    const handleBackdropClick = (e: React.MouseEvent) => {
+        if (e.target === e.currentTarget && onClose) {
+            onClose();
+        }
+    };
+
+    const terminalContent = (
         <div
             ref={containerRef}
             className={cn(
                 "rounded-lg border border-slate-800 bg-slate-950/80 p-6 shadow-2xl backdrop-blur-sm font-mono text-sm sm:text-base",
+                isModalOpen && "w-full max-w-4xl mx-auto",
                 className
             )}
             onClick={focusInput}
         >
             <div className="flex gap-2 mb-4 border-b border-slate-800 pb-2 items-center">
-                <div className="h-3 w-3 rounded-full bg-red-500/80" />
-                <div className="h-3 w-3 rounded-full bg-yellow-500/80" />
-                <div className="h-3 w-3 rounded-full bg-green-500/80" />
-                {/* <span className="ml-2 text-xs text-slate-500">abhi@portfolio:~</span> */}
-                <span className="ml-2 text-xs text-slate-500">Terminal</span>
+                <div
+                    className="h-3 w-3 rounded-full bg-red-500/80 cursor-pointer hover:bg-red-400 transition-colors"
+                    onClick={handleClose}
+                    title="Close"
+                />
+                <div
+                    className="h-3 w-3 rounded-full bg-yellow-500/80 cursor-pointer hover:bg-yellow-400 transition-colors"
+                    onClick={handleClose}
+                    title="Minimize"
+                />
+                <div
+                    className="h-3 w-3 rounded-full bg-green-500/80 cursor-pointer hover:bg-green-400 transition-colors"
+                    onClick={handleClose}
+                    title="Maximize"
+                />
+                <span className="ml-2 text-xs text-slate-500 flex-1">Terminal</span>
             </div>
 
             <div
                 ref={outputRef}
-                className="space-y-1 text-slate-300 max-h-96 overflow-y-auto scrollbar-thin scrollbar-thumb-slate-700 scrollbar-track-transparent"
+                className={cn(
+                    "space-y-1 text-slate-300 overflow-y-auto scrollbar-thin scrollbar-thumb-slate-700 scrollbar-track-transparent",
+                    isModalOpen ? "max-h-[60vh]" : "max-h-96"
+                )}
             >
                 {history.map((line, i) => (
                     <div key={i} className="flex flex-col">
                         {line.type === 'command' ? (
                             <div className="flex">
-                                <span className="mr-2 text-sky-400">&gt;</span>
+                                <span className="mr-2 text-sky-400">abhi@portfolio:~$</span>
                                 <span className="text-green-400">{line.content}</span>
                             </div>
                         ) : (
                             <div className={cn(
-                                "flex",
+                                "ml-1",
                                 line.type === 'error' && "text-red-400"
                             )}>
-                                <span className="mr-2 text-sky-400">abhi@portfolio:~$</span>
                                 {line.content}
                             </div>
                         )}
@@ -241,17 +293,20 @@ export const Terminal: React.FC<TerminalProps> = ({
                 {isInitialized && isActive && (
                     <div className="flex items-center">
                         <span className="mr-2 text-sky-400">abhi@portfolio:~$</span>
-                        <input
-                            ref={inputRef}
-                            type="text"
-                            value={currentInput}
-                            onChange={(e) => setCurrentInput(e.target.value)}
-                            onKeyDown={handleKeyDown}
-                            className="flex-1 bg-transparent outline-none text-slate-300 caret-sky-400"
-                            autoFocus
-                            spellCheck={false}
-                        />
-                        <span className="animate-pulse text-sky-400">_</span>
+                        <div className="flex-1 flex items-center">
+                            <input
+                                ref={inputRef}
+                                type="text"
+                                value={currentInput}
+                                onChange={(e) => setCurrentInput(e.target.value)}
+                                onKeyDown={handleKeyDown}
+                                className="bg-transparent outline-none text-slate-300 caret-transparent"
+                                style={{ width: `${Math.max(1, currentInput.length)}ch` }}
+                                autoFocus
+                                spellCheck={false}
+                            />
+                            <span className="animate-pulse text-sky-400 ml-0">_</span>
+                        </div>
                     </div>
                 )}
 
@@ -266,4 +321,17 @@ export const Terminal: React.FC<TerminalProps> = ({
             </div>
         </div>
     );
+
+    if (isModalOpen) {
+        return (
+            <div
+                className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/70 backdrop-blur-sm animate-in fade-in duration-200"
+                onClick={handleBackdropClick}
+            >
+                {terminalContent}
+            </div>
+        );
+    }
+
+    return terminalContent;
 };

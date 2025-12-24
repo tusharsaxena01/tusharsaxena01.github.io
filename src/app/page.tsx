@@ -18,7 +18,7 @@ export default function Home() {
 
   return (
     <main className="min-h-screen relative flex flex-col font-sans text-gray-200">
-      <CustomCursor />
+      {/* <CustomCursor /> */}
       <BackToTop />
       <GridBackground />
       <Navbar />
