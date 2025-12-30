@@ -2,7 +2,6 @@
 
 import React, { useEffect, useState } from "react";
 import { cn } from "@/utils/cn";
-import gsap from "gsap";
 
 export const BackToTop = () => {
     const [isVisible, setIsVisible] = useState(false);
