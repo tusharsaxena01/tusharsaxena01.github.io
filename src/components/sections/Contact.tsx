@@ -3,8 +3,10 @@
 import React, { useRef, useState } from "react";
 import gsap from "gsap";
 import { useGSAP } from "@gsap/react";
+import { usePortfolioData } from "@/hooks/usePortfolioData";
 
 export const Contact = () => {
+    const { data } = usePortfolioData();
     const container = useRef(null);
     const [status, setStatus] = useState<"idle" | "submitting" | "success">("idle");
 
@@ -27,10 +29,10 @@ export const Contact = () => {
     return (
         <section id="contact" ref={container} className="py-6 px-6 lg:px-20 max-w-4xl mx-auto text-center">
             <div className="mb-12">
-                <p className="text-sky-500 font-mono mb-4">05. What's Next?</p>
-                <h2 className="text-4xl lg:text-5xl font-bold text-white mb-6">Get In Touch</h2>
+                <p className="text-sky-500 font-mono mb-4">{data.contact.sectionNumber}. {data.contact.subtitle}</p>
+                <h2 className="text-4xl lg:text-5xl font-bold text-white mb-6">{data.contact.title}</h2>
                 <p className="text-slate-400 max-w-xl mx-auto">
-                    I am currently looking for new opportunities. Whether you have a question or just want to say hi, my inbox is always open.
+                    {data.contact.description}
                 </p>
             </div>
 
@@ -60,8 +62,8 @@ export const Contact = () => {
             )}
 
             <div className="my-10">
-                <a href="mailto:saxena.abhi7007@gmail.com" className="font-mono text-slate-500 hover:text-sky-400 transition-colors">
-                    saxena.abhi7007@gmail.com
+                <a href={`mailto:${data.personal.email}`} className="font-mono text-slate-500 hover:text-sky-400 transition-colors">
+                    {data.personal.email}
                 </a>
             </div>
         </section>

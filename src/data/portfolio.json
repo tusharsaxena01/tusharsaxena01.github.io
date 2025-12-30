@@ -1,0 +1,252 @@
+{
+    "personal": {
+        "name": "Abhi Saxena",
+        "initials": "AS",
+        "role": "Full Stack Software Developer",
+        "company": "Tranzita Systems",
+        "location": "India",
+        "email": "saxena.abhi7007@gmail.com",
+        "tagline": "Systems over Interfaces. Performance is a feature.",
+        "bio": {
+            "paragraphs": [
+                "I am a software developer based in India, currently building robust systems at <strong>Tranzita Systems</strong>. My philosophy is simple: <em>Code is a tool, not the goal.</em> The goal is solving problems with efficiency and elegance.",
+                "I started coding 2+ years ago, diving deep into the Javascript ecosystem. I don't just write functions; I architect experiences. From optimizing database queries to crafting pixel-perfect 60fps animations, I obsess over the details that others overlook.",
+                "When I'm not pushing to production, I'm exploring new technologies, refining my mental models of distributed systems, or just tweaking my terminal config."
+            ],
+            "currentStatus": {
+                "role": "Software Developer",
+                "company": "Tranzita Systems",
+                "location": "India",
+                "learning": [
+                    "Next.js",
+                    "Rust",
+                    "Three.js"
+                ],
+                "coffee_level": "High"
+            }
+        }
+    },
+    "hero": {
+        "greeting": "> HELLO_WORLD",
+        "headline": "I am {name}.",
+        "subheadline": [
+            "Full Stack Software Developer at <strong>{company}</strong>.",
+            "Building high-performance systems with precision."
+        ],
+        "cta": [
+            {
+                "text": "View Projects",
+                "href": "#projects",
+                "variant": "primary"
+            },
+            {
+                "text": "Contact Me",
+                "href": "#contact",
+                "variant": "secondary"
+            }
+        ],
+        "terminal": {
+            "initialMessages": [
+                "Loading developer profile...",
+                "Fetching skills from database...",
+                "Optimizing performance...",
+                "Ready."
+            ],
+            "modalMessages": [
+                "Welcome to my interactive terminal!",
+                "Type 'help' to see available commands."
+            ]
+        }
+    },
+    "about": {
+        "sectionNumber": "01",
+        "title": "About Me"
+    },
+    "skills": {
+        "sectionNumber": "02",
+        "title": "Tech Stack",
+        "categories": [
+            {
+                "category": "Frontend",
+                "items": [
+                    "React",
+                    "Next.js",
+                    "Tailwind CSS",
+                    "GSAP",
+                    "Three.js"
+                ]
+            },
+            {
+                "category": "Backend",
+                "items": [
+                    "Node.js",
+                    "Express",
+                    "PostgreSQL",
+                    "Prisma",
+                    "Redis"
+                ]
+            },
+            {
+                "category": "DevOps & Tools",
+                "items": [
+                    "Docker",
+                    "AWS",
+                    "Git",
+                    "Figma",
+                    "Linux"
+                ]
+            }
+        ]
+    },
+    "projects": {
+        "sectionNumber": "03",
+        "title": "Selected Projects",
+        "items": [
+            {
+                "title": "Tranzita Landing Page",
+                "description": "High-performance landing page with scroll-driven animations and complex 3D transforms.",
+                "tech": [
+                    "Next.js",
+                    "GSAP",
+                    "Three.js"
+                ],
+                "type": "Production",
+                "link": "#"
+            },
+            {
+                "title": "E-Commerce Dashboard",
+                "description": "Real-time analytics dashboard with heavy data visualization and optimistic UI updates.",
+                "tech": [
+                    "React",
+                    "D3.js",
+                    "Socket.io"
+                ],
+                "type": "Personal",
+                "link": "#"
+            },
+            {
+                "title": "API Gateway Service",
+                "description": "High-throughput node.js service handling thousands of requests per second.",
+                "tech": [
+                    "Node.js",
+                    "Redis",
+                    "Docker"
+                ],
+                "type": "Backend",
+                "link": "#"
+            }
+        ]
+    },
+    "experience": {
+        "sectionNumber": "04",
+        "title": "Experience",
+        "items": [
+            {
+                "company": "Tranzita Systems",
+                "role": "Software Developer",
+                "period": "2023 - Present",
+                "description": [
+                    "Architected and maintained core microservices handling high-frequency data.",
+                    "Optimized frontend performance, reducing TTI by 40% using Next.js optimization techniques.",
+                    "Collaborated with cross-functional teams to deliver pixel-perfect UI/UX."
+                ]
+            },
+            {
+                "company": "Freelance",
+                "role": "Full Stack Developer",
+                "period": "2021 - 2023",
+                "description": [
+                    "Delivered custom web solutions for clients in E-commerce and EdTech.",
+                    "Built performant REST APIs using Node.js and Express."
+                ]
+            }
+        ]
+    },
+    "contact": {
+        "sectionNumber": "05",
+        "title": "Get In Touch",
+        "subtitle": "What's Next?",
+        "description": "I'm currently open to new opportunities and interesting projects. Whether you have a question or just want to say hi, feel free to reach out!"
+    },
+    "social": {
+        "github": "https://github.com/abhisaxena",
+        "linkedin": "https://linkedin.com/in/abhisaxena",
+        "twitter": "https://twitter.com/abhisaxena"
+    },
+    "terminal": {
+        "commands": {
+            "help": [
+                "Available commands:",
+                "  help       - Show this help message",
+                "  about      - Learn more about me",
+                "  skills     - View my technical skills",
+                "  contact    - Get my contact information",
+                "  projects   - List my projects",
+                "  experience - View work experience",
+                "  clear      - Clear the terminal",
+                "  date       - Show current date and time",
+                "  whoami     - Display user information",
+                "  exit       - Close the terminal modal"
+            ],
+            "about": [
+                "Hi! I'm Abhi Saxena, a passionate Full Stack Developer.",
+                "I love building modern web applications with cutting-edge technologies.",
+                "Currently working at Tranzita Systems, crafting scalable solutions."
+            ],
+            "skills": [
+                "Technical Skills:",
+                "  • Frontend: React, Next.js, TypeScript, TailwindCSS",
+                "  • Backend: Node.js, Express, NestJS",
+                "  • Database: PostgreSQL, MongoDB, Redis",
+                "  • Tools: Git, Docker, GSAP, Framer Motion"
+            ],
+            "contact": [
+                "Contact Information:",
+                "  • Email: saxena.abhi7007@gmail.com",
+                "  • GitHub: github.com/abhisaxena",
+                "  • LinkedIn: linkedin.com/in/abhisaxena"
+            ],
+            "projects": [
+                "Featured Projects:",
+                "  1. E-commerce Platform - Full-stack solution with Next.js",
+                "  2. Task Management App - Real-time collaboration tool",
+                "  3. Portfolio Website - You're looking at it! 🎨"
+            ],
+            "experience": [
+                "Work Experience:",
+                "  • Tranzita Systems (2023 - Present)",
+                "    Software Developer",
+                "  • Freelance (2021 - 2023)",
+                "    Full Stack Developer"
+            ],
+            "whoami": "abhi@portfolio - Full Stack Developer"
+        }
+    },
+    "navbar": {
+        "links": [
+            {
+                "name": "About",
+                "href": "#about"
+            },
+            {
+                "name": "Skills",
+                "href": "#skills"
+            },
+            {
+                "name": "Projects",
+                "href": "#projects"
+            },
+            {
+                "name": "Experience",
+                "href": "#experience"
+            },
+            {
+                "name": "Contact",
+                "href": "#contact"
+            }
+        ]
+    },
+    "footer": {
+        "text": "Built with Next.js, GSAP, and ☕"
+    }
+}

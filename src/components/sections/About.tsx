@@ -4,10 +4,12 @@ import React, { useRef } from "react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { useGSAP } from "@gsap/react";
+import { usePortfolioData } from "@/hooks/usePortfolioData";
 
 gsap.registerPlugin(ScrollTrigger);
 
 export const About = () => {
+    const { data } = usePortfolioData();
     const container = useRef(null);
 
     useGSAP(() => {
@@ -40,23 +42,15 @@ export const About = () => {
 
             <div className="max-w-4xl mx-auto">
                 <h2 className="about-title text-3xl font-bold mb-12 flex items-center gap-4 text-white">
-                    <span className="text-sky-500 font-mono text-xl">01.</span>
-                    About Me
+                    <span className="text-sky-500 font-mono text-xl">{data.about.sectionNumber}.</span>
+                    {data.about.title}
                 </h2>
 
                 <div className="grid md:grid-cols-3 gap-12">
                     <div className="md:col-span-2 space-y-6 text-slate-300 leading-relaxed font-light about-text">
-                        <p>
-                            I am a software developer based in India, currently building robust systems at <strong className="text-white">Tranzita Systems</strong>.
-                            My philosophy is simple: <span className="text-sky-400 italic">Code is a tool, not the goal.</span> The goal is solving problems with efficiency and elegance.
-                        </p>
-                        <p>
-                            I started coding 2+ years ago, diving deep into the Javascript ecosystem. I don't just write functions; I architect experiences.
-                            From optimizing database queries to crafting pixel-perfect 60fps animations, I obsess over the details that others overlook.
-                        </p>
-                        <p>
-                            When I'm not pushing to production, I'm exploring new technologies, refining my mental models of distributed systems, or just tweaking my terminal config.
-                        </p>
+                        {data.personal.bio.paragraphs.map((paragraph, index) => (
+                            <p key={index} dangerouslySetInnerHTML={{ __html: paragraph }} />
+                        ))}
                     </div>
 
                     <div className="about-text p-6 border border-slate-800 bg-slate-900/50 rounded-lg font-mono text-xs text-slate-400 relative overflow-hidden group">
@@ -65,13 +59,7 @@ export const About = () => {
                     // current_status.json
                         </div>
                         <pre className="space-y-1">
-                            {`{
-  "role": "Software Developer",
-  "company": "Tranzita Systems",
-  "location": "India",
-  "learning": ["Next.js", "Rust", "Three.js"],
-  "coffee_level": "High"
-}`}
+                            {JSON.stringify(data.personal.bio.currentStatus, null, 2)}
                         </pre>
                     </div>
                 </div>

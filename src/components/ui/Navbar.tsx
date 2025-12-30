@@ -3,16 +3,10 @@
 import React, { useEffect, useState } from "react";
 import { cn } from "@/utils/cn";
 import gsap from "gsap";
-
-const navItems = [
-    { name: "About", href: "#about", key: "A" },
-    { name: "Projects", href: "#projects", key: "P" },
-    { name: "Skills", href: "#skills", key: "S" },
-    { name: "Experience", href: "#experience", key: "E" },
-    { name: "Contact", href: "#contact", key: "C" },
-];
+import { usePortfolioData } from "@/hooks/usePortfolioData";
 
 export const Navbar = () => {
+    const { data } = usePortfolioData();
     const [scrolled, setScrolled] = useState(false);
     const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
@@ -51,20 +45,20 @@ export const Navbar = () => {
             <div className="container mx-auto px-6 flex items-center justify-between">
                 <div className="font-mono font-bold text-xl tracking-tighter text-sky-400 z-50 relative">
                     <a href="/">
-                        &lt;AS /&gt;
+                        &lt;{data.personal.initials} /&gt;
                     </a>
                 </div>
 
                 {/* Desktop Menu */}
                 <ul className="hidden md:flex gap-8">
-                    {navItems.map((item) => (
+                    {data.navbar.links.map((item, index) => (
                         <li key={item.name}>
                             <a
                                 href={item.href}
                                 className="group flex items-center gap-2 text-sm font-medium text-slate-400 hover:text-white transition-colors"
                             >
                                 <span className="text-sky-500 opacity-100 group-hover:opacity-0 transition-opacity font-mono text-xs">
-                                    [{item.key}]
+                                    [{item.name.charAt(0).toUpperCase()}]
                                 </span>
                                 {item.name}
                             </a>
@@ -83,7 +77,7 @@ export const Navbar = () => {
                 {/* Mobile Menu Overlay */}
                 {mobileMenuOpen && (
                     <div className="fixed inset-0 bg-slate-950/95 backdrop-blur-xl z-40 flex flex-col items-center justify-center space-y-8 md:hidden">
-                        {navItems.map((item) => (
+                        {data.navbar.links.map((item) => (
                             <a
                                 key={item.name}
                                 href={item.href}

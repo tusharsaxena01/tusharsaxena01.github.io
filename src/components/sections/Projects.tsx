@@ -5,31 +5,12 @@ import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { useGSAP } from "@gsap/react";
 import Atropos from "atropos/react";
+import { usePortfolioData } from "@/hooks/usePortfolioData";
 
 gsap.registerPlugin(ScrollTrigger);
 
-const projects = [
-    {
-        title: "Tranzita Landing Page",
-        description: "High-performance landing page with scroll-driven animations and complex 3D transforms.",
-        tech: ["Next.js", "GSAP", "Three.js"],
-        type: "Production",
-    },
-    {
-        title: "E-Commerce Dashboard",
-        description: "Real-time analytics dashboard with heavy data visualization and optimistic UI updates.",
-        tech: ["React", "D3.js", "Socket.io"],
-        type: "Personal",
-    },
-    {
-        title: "API Gateway Service",
-        description: "High-throughput node.js service handling thousands of requests per second.",
-        tech: ["Node.js", "Redis", "Docker"],
-        type: "Backend",
-    },
-];
-
 export const Projects = () => {
+    const { data } = usePortfolioData();
     const container = useRef(null);
 
     useGSAP(() => {
@@ -49,12 +30,12 @@ export const Projects = () => {
     return (
         <section id="projects" ref={container} className="py-20 px-6 lg:px-20">
             <h2 className="text-3xl font-bold mb-16 flex items-center gap-4 text-white">
-                <span className="text-sky-500 font-mono text-xl">03.</span>
-                Selected Projects
+                <span className="text-sky-500 font-mono text-xl">{data.projects.sectionNumber}.</span>
+                {data.projects.title}
             </h2>
 
             <div className="space-y-16">
-                {projects.map((project, index) => (
+                {data.projects.items.map((project, index) => (
                     <div key={index} className="project-card group relative">
                         <Atropos
                             activeOffset={40}

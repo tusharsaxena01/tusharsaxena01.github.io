@@ -1,10 +1,11 @@
 "use client";
 
-import React, { useEffect, useRef, useState, KeyboardEvent } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { cn } from "@/utils/cn";
 import gsap from "gsap";
+import { usePortfolioData } from "@/hooks/usePortfolioData";
 
-interface TerminalLine {
+interface HistoryLine {
     type: 'command' | 'output' | 'error';
     content: string;
 }
@@ -16,71 +17,35 @@ interface TerminalProps {
     onClose?: () => void;
 }
 
-const commands: Record<string, () => string | string[]> = {
-    help: () => [
-        "Available commands:",
-        "  help       - Show this help message",
-        "  about      - Learn more about me",
-        "  skills     - View my technical skills",
-        "  contact    - Get my contact information",
-        "  projects   - List my projects",
-        "  experience - View work experience",
-        "  clear      - Clear the terminal",
-        "  date       - Show current date and time",
-        "  whoami     - Display user information",
-        "  exit       - Close the terminal modal",
-    ],
-    about: () => [
-        "Hi! I'm Abhi Saxena, a passionate Full Stack Developer.",
-        "I love building modern web applications with cutting-edge technologies.",
-        "Currently working at Tranzita Systems, crafting scalable solutions.",
-    ],
-    skills: () => [
-        "Technical Skills:",
-        "  • Frontend: React, Next.js, TypeScript, TailwindCSS",
-        "  • Backend: Node.js, Express, NestJS",
-        "  • Database: PostgreSQL, MongoDB, Redis",
-        "  • Tools: Git, Docker, GSAP, Framer Motion",
-    ],
-    contact: () => [
-        "Contact Information:",
-        "  • Email: abhi@example.com",
-        "  • GitHub: github.com/abhisaxena",
-        "  • LinkedIn: linkedin.com/in/abhisaxena",
-    ],
-    projects: () => [
-        "Featured Projects:",
-        "  1. E-commerce Platform - Full-stack solution with Next.js",
-        "  2. Task Management App - Real-time collaboration tool",
-        "  3. Portfolio Website - You're looking at it! 🎨",
-    ],
-    experience: () => [
-        "Work Experience:",
-        "  • Tranzita Systems (2023 - Present)",
-        "    Software Developer",
-        "  • Freelance (2021 - 2023)",
-        "    Full Stack Developer",
-    ],
-    date: () => new Date().toLocaleString(),
-    whoami: () => "abhi@portfolio - Full Stack Developer",
-    clear: () => "",
-};
-
 export const Terminal: React.FC<TerminalProps> = ({
     initialMessage = ["Welcome to my interactive terminal!", "Type 'help' to see available commands."],
     className,
     isModalOpen = false,
     onClose,
 }) => {
+    const { data } = usePortfolioData();
     const containerRef = useRef<HTMLDivElement>(null);
     const inputRef = useRef<HTMLInputElement>(null);
     const outputRef = useRef<HTMLDivElement>(null);
-    const [history, setHistory] = useState<TerminalLine[]>([]);
+    const [history, setHistory] = useState<HistoryLine[]>([]);
     const [currentInput, setCurrentInput] = useState("");
     const [commandHistory, setCommandHistory] = useState<string[]>([]);
     const [historyIndex, setHistoryIndex] = useState(-1);
     const [isInitialized, setIsInitialized] = useState(false);
     const [isActive, setIsActive] = useState(false);
+
+    // Build commands object from JSON data
+    const commands: Record<string, () => string | string[]> = {
+        help: () => data.terminal.commands.help,
+        about: () => data.terminal.commands.about,
+        skills: () => data.terminal.commands.skills,
+        contact: () => data.terminal.commands.contact,
+        projects: () => data.terminal.commands.projects,
+        experience: () => data.terminal.commands.experience,
+        date: () => new Date().toLocaleString(),
+        whoami: () => data.terminal.commands.whoami as string,
+        clear: () => "",
+    };
 
     useEffect(() => {
         // Only run once on mount to prevent messages from repeating
@@ -301,7 +266,7 @@ export const Terminal: React.FC<TerminalProps> = ({
                                 onChange={(e) => setCurrentInput(e.target.value)}
                                 onKeyDown={handleKeyDown}
                                 className="bg-transparent outline-none text-slate-300 caret-transparent"
-                                style={{ width: `${Math.max(1, currentInput.length)}ch` }}
+                                style={{ width: `${Math.max(1, currentInput.length)} ch` }}
                                 autoFocus
                                 spellCheck={false}
                             />

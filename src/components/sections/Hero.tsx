@@ -5,8 +5,10 @@ import gsap from "gsap";
 import { Terminal } from "../ui/Terminal";
 import Atropos from "atropos/react";
 import "atropos/css";
+import { usePortfolioData } from "@/hooks/usePortfolioData";
 
 export const Hero = () => {
+    const { data, interpolate } = usePortfolioData();
     const containerRef = useRef<HTMLDivElement>(null);
     const headlineRef = useRef<HTMLHeadingElement>(null);
     const subheadlineRef = useRef<HTMLParagraphElement>(null);
@@ -59,30 +61,29 @@ export const Hero = () => {
 
             <div className="flex-1 space-y-8 z-10 text-center lg:text-left">
                 <h1 ref={headlineRef} className="text-4xl sm:text-5xl lg:text-7xl font-bold tracking-tight text-white">
-                    <span className="block text-slate-400 text-xl lg:text-3xl font-mono mb-2">&gt; HELLO_WORLD</span>
-                    I am <span className="text-sky-400">Abhi Saxena</span>.
+                    <span className="block text-slate-400 text-xl lg:text-3xl font-mono mb-2">{data.hero.greeting}</span>
+                    {interpolate(data.hero.headline).split(' ').slice(0, 2).join(' ')} <span className="text-sky-400">{data.personal.name}</span>.
                 </h1>
 
                 <p ref={subheadlineRef} className="text-lg lg:text-2xl text-slate-400 max-w-2xl mx-auto lg:mx-0">
-                    Full Stack Software Developer at <span className="text-white font-semibold">Tranzita Systems</span>.
+                    <span dangerouslySetInnerHTML={{ __html: interpolate(data.hero.subheadline[0]) }} />
                     <br />
-                    Building high-performance systems with precision.
+                    {data.hero.subheadline[1]}
                 </p>
 
                 <div className="flex flex-wrap gap-4 justify-center lg:justify-start">
-                    <a
-                        href="#projects"
-                        className="hero-cta opacity-100 px-8 py-3 bg-sky-600 hover:bg-sky-500 text-white font-bold rounded-lg transition-all shadow-lg shadow-sky-500/20 border border-sky-400/50 hover:scale-105 active:scale-95"
-                    >
-                        View Projects
-                    </a>
-
-                    <a
-                        href="#contact"
-                        className="hero-cta opacity-100 px-8 py-3 bg-slate-800 hover:bg-slate-700 text-white font-bold rounded-lg transition-all border border-slate-700 hover:scale-105 active:scale-95"
-                    >
-                        Contact Me
-                    </a>
+                    {data.hero.cta.map((button, index) => (
+                        <a
+                            key={index}
+                            href={button.href}
+                            className={`hero-cta opacity-100 px-8 py-3 font-bold rounded-lg transition-all hover:scale-105 active:scale-95 ${button.variant === 'primary'
+                                    ? 'bg-sky-600 hover:bg-sky-500 text-white shadow-lg shadow-sky-500/20 border border-sky-400/50'
+                                    : 'bg-slate-800 hover:bg-slate-700 text-white border border-slate-700'
+                                }`}
+                        >
+                            {button.text}
+                        </a>
+                    ))}
                 </div>
             </div>
 
@@ -93,12 +94,7 @@ export const Hero = () => {
                 >
                     <div className="cursor-pointer">
                         <Terminal
-                            initialMessage={[
-                                "Loading developer profile...",
-                                "Fetching skills from database...",
-                                "Optimizing performance...",
-                                "Ready."
-                            ]}
+                            initialMessage={data.hero.terminal.initialMessages}
                             className="w-full h-[300px] lg:h-[400px]"
                         />
                     </div>
@@ -108,10 +104,7 @@ export const Hero = () => {
             {/* Terminal Modal */}
             {isTerminalModalOpen && (
                 <Terminal
-                    initialMessage={[
-                        "Welcome to my interactive terminal!",
-                        "Type 'help' to see available commands.",
-                    ]}
+                    initialMessage={data.hero.terminal.modalMessages}
                     isModalOpen={true}
                     onClose={() => setIsTerminalModalOpen(false)}
                 />

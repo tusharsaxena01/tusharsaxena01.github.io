@@ -4,32 +4,12 @@ import React, { useRef } from "react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { useGSAP } from "@gsap/react";
+import { usePortfolioData } from "@/hooks/usePortfolioData";
 
 gsap.registerPlugin(ScrollTrigger);
 
-const experiences = [
-    {
-        company: "Tranzita Systems",
-        role: "Software Developer",
-        period: "2023 - Present",
-        description: [
-            "Architected and maintained core microservices handling high-frequency data.",
-            "Optimized frontend performance, reducing TTI by 40% using Next.js optimization techniques.",
-            "Collaborated with cross-functional teams to deliver pixel-perfect UI/UX.",
-        ],
-    },
-    {
-        company: "Freelance",
-        role: "Full Stack Developer",
-        period: "2021 - 2023",
-        description: [
-            "Delivered custom web solutions for clients in E-commerce and EdTech.",
-            "Built performant REST APIs using Node.js and Express.",
-        ],
-    },
-];
-
 export const Experience = () => {
+    const { data } = usePortfolioData();
     const container = useRef(null);
 
     useGSAP(() => {
@@ -55,12 +35,12 @@ export const Experience = () => {
             <div className="absolute left-6 lg:left-20 top-0 bottom-0 w-px bg-slate-800 hidden md:block" />
 
             <h2 className="exp-title text-3xl font-bold mb-16 flex items-center gap-4 text-white pl-0 md:pl-10">
-                <span className="text-sky-500 font-mono text-xl">04.</span>
-                Experience
+                <span className="text-sky-500 font-mono text-xl">{data.experience.sectionNumber}.</span>
+                {data.experience.title}
             </h2>
 
             <div className="space-y-8 pl-0 md:pl-10">
-                {experiences.map((exp, index) => (
+                {data.experience.items.map((exp, index) => (
                     <div key={index} className="exp-item relative border-l-2 border-slate-700 pl-6 md:border-none md:pl-0 group cursor-default transition-all duration-300">
                         {/* Timeline dot for desktop */}
                         <div className="hidden md:block absolute -left-[45px] top-2 w-3 h-3 rounded-full bg-slate-800 box-content border-4 border-slate-950 group-hover:bg-sky-500 transition-colors" />
