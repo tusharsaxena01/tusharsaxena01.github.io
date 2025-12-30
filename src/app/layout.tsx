@@ -10,6 +10,9 @@ const jetbrainsMono = JetBrains_Mono({
 
 export const metadata: Metadata = {
   title: "Abhi Saxena | Full Stack Developer",
+  icons:{
+    icon: "https://avatars.githubusercontent.com/u/71825717?v=4"
+  },
   description: "Systems over Interfaces. Performance is a feature.",
 };
 

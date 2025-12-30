@@ -28,6 +28,7 @@ export interface PortfolioData {
             text: string;
             href: string;
             variant: 'primary' | 'secondary';
+            download?: string;
         }>;
         terminal: {
             initialMessages: string[];

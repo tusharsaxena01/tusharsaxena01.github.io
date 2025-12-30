@@ -5,47 +5,116 @@ import gsap from "gsap";
 import { useGSAP } from "@gsap/react";
 import { usePortfolioData } from "@/hooks/usePortfolioData";
 
+type Status = "idle" | "submitting" | "success" | "error";
+
 export const Contact = () => {
     const { data } = usePortfolioData();
-    const container = useRef(null);
-    const [status, setStatus] = useState<"idle" | "submitting" | "success">("idle");
+    const container = useRef<HTMLDivElement | null>(null);
+    const [status, setStatus] = useState<Status>("idle");
 
-    const handleSubmit = (e: React.FormEvent) => {
+    const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
         setStatus("submitting");
-        // Simulate API call
-        setTimeout(() => {
+
+        const form = e.currentTarget;
+        const formData = new FormData(form);
+
+        try {
+            const res = await fetch("https://formspree.io/f/xvojdryj", {
+                method: "POST",
+                body: formData,
+                headers: {
+                    Accept: "application/json"
+                }
+            });
+
+            if (!res.ok) throw new Error("Form submission failed");
+
             setStatus("success");
-        }, 2000);
+            form.reset();
+        } catch (err) {
+            console.error(err);
+            setStatus("error");
+        }
     };
 
-    useGSAP(() => {
-        if (status === "success") {
-            gsap.to(".contact-form", { opacity: 0, height: 0, duration: 0.5, ease: "power2.inOut" });
-            gsap.fromTo(".success-message", { opacity: 0, y: 20 }, { opacity: 1, y: 0, delay: 0.5 });
-        }
-    }, [status]);
+    useGSAP(
+        () => {
+            if (status === "success") {
+                gsap.to(".contact-form", {
+                    opacity: 0,
+                    height: 0,
+                    duration: 0.5,
+                    ease: "power2.inOut"
+                });
+
+                gsap.fromTo(
+                    ".success-message",
+                    { opacity: 0, y: 20 },
+                    { opacity: 1, y: 0, delay: 0.5 }
+                );
+            }
+        },
+        { dependencies: [status] }
+    );
 
     return (
-        <section id="contact" ref={container} className="py-6 px-6 lg:px-20 max-w-4xl mx-auto text-center">
+        <section
+            id="contact"
+            ref={container}
+            className="py-6 px-6 lg:px-20 max-w-4xl mx-auto text-center"
+        >
             <div className="mb-12">
-                <p className="text-sky-500 font-mono mb-4">{data.contact.sectionNumber}. {data.contact.subtitle}</p>
-                <h2 className="text-4xl lg:text-5xl font-bold text-white mb-6">{data.contact.title}</h2>
+                <p className="text-sky-500 font-mono mb-4">
+                    {data.contact.sectionNumber}. {data.contact.subtitle}
+                </p>
+                <h2 className="text-4xl lg:text-5xl font-bold text-white mb-6">
+                    {data.contact.title}
+                </h2>
                 <p className="text-slate-400 max-w-xl mx-auto">
                     {data.contact.description}
                 </p>
             </div>
 
             {status !== "success" ? (
-                <form onSubmit={handleSubmit} className="contact-form space-y-4 max-w-md mx-auto text-left">
+                <form
+                    onSubmit={handleSubmit}
+                    className="contact-form space-y-4 max-w-md mx-auto text-left"
+                >
                     <div>
-                        <label htmlFor="email" className="block text-sm font-mono text-slate-400 mb-2">Email</label>
-                        <input required type="email" id="email" className="w-full bg-slate-900 border border-slate-700 rounded p-3 text-white focus:border-sky-500 outline-none transition-colors" placeholder="user@example.com" />
+                        <label
+                            htmlFor="email"
+                            className="block text-sm font-mono text-slate-400 mb-2"
+                        >
+                            Your email
+                        </label>
+                        <input
+                            required
+                            type="email"
+                            name="email"
+                            id="email"
+                            className="w-full bg-slate-900 border border-slate-700 rounded p-3 text-white focus:border-sky-500 outline-none transition-colors"
+                            placeholder="user@example.com"
+                        />
                     </div>
+
                     <div>
-                        <label htmlFor="message" className="block text-sm font-mono text-slate-400 mb-2">Message</label>
-                        <textarea required id="message" rows={4} className="w-full bg-slate-900 border border-slate-700 rounded p-3 text-white focus:border-sky-500 outline-none transition-colors" placeholder="Hello world..." />
+                        <label
+                            htmlFor="message"
+                            className="block text-sm font-mono text-slate-400 mb-2"
+                        >
+                            Your message
+                        </label>
+                        <textarea
+                            required
+                            name="message"
+                            id="message"
+                            rows={4}
+                            className="w-full bg-slate-900 border border-slate-700 rounded p-3 text-white focus:border-sky-500 outline-none transition-colors"
+                            placeholder="Hello world..."
+                        />
                     </div>
+
                     <button
                         type="submit"
                         disabled={status === "submitting"}
@@ -53,6 +122,12 @@ export const Contact = () => {
                     >
                         {status === "submitting" ? "Sending..." : "Send Message"}
                     </button>
+
+                    {status === "error" && (
+                        <p className="text-red-400 font-mono text-sm">
+                            Something went wrong. Please try again.
+                        </p>
+                    )}
                 </form>
             ) : (
                 <div className="success-message p-8 border border-green-500/30 bg-green-500/10 rounded text-green-400 font-mono">
@@ -62,7 +137,10 @@ export const Contact = () => {
             )}
 
             <div className="my-10">
-                <a href={`mailto:${data.personal.email}`} className="font-mono text-slate-500 hover:text-sky-400 transition-colors">
+                <a
+                    href={`mailto:${data.personal.email}`}
+                    className="font-mono text-slate-500 hover:text-sky-400 transition-colors"
+                >
                     {data.personal.email}
                 </a>
             </div>

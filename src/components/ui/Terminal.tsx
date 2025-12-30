@@ -32,7 +32,7 @@ export const Terminal: React.FC<TerminalProps> = ({
     const [commandHistory, setCommandHistory] = useState<string[]>([]);
     const [historyIndex, setHistoryIndex] = useState(-1);
     const [isInitialized, setIsInitialized] = useState(false);
-    const [isActive, setIsActive] = useState(false);
+    const [isActive, setIsActive] = useState(true);
 
     // Build commands object from JSON data
     const commands: Record<string, () => string | string[]> = {

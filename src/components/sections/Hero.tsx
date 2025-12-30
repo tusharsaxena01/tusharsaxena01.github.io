@@ -80,6 +80,7 @@ export const Hero = () => {
                                     ? 'bg-sky-600 hover:bg-sky-500 text-white shadow-lg shadow-sky-500/20 border border-sky-400/50'
                                     : 'bg-slate-800 hover:bg-slate-700 text-white border border-slate-700'
                                 }`}
+                            download={button.download}
                         >
                             {button.text}
                         </a>

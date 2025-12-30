@@ -2,27 +2,28 @@
     "personal": {
         "name": "Abhi Saxena",
         "initials": "AS",
-        "role": "Full Stack Software Developer",
+        "role": "Software Development Engineer",
         "company": "Tranzita Systems",
         "location": "India",
         "email": "saxena.abhi7007@gmail.com",
-        "tagline": "Systems over Interfaces. Performance is a feature.",
+        "tagline": "Automation, Data, and Scalable Systems.",
         "bio": {
             "paragraphs": [
-                "I am a software developer based in India, currently building robust systems at <strong>Tranzita Systems</strong>. My philosophy is simple: <em>Code is a tool, not the goal.</em> The goal is solving problems with efficiency and elegance.",
-                "I started coding 2+ years ago, diving deep into the Javascript ecosystem. I don't just write functions; I architect experiences. From optimizing database queries to crafting pixel-perfect 60fps animations, I obsess over the details that others overlook.",
-                "When I'm not pushing to production, I'm exploring new technologies, refining my mental models of distributed systems, or just tweaking my terminal config."
+                "I’m a Software Development Engineer at <strong>Tranzita Systems</strong>, where I turn messy data and manual processes into clean, automated backend systems for enterprise and government clients. If it can be automated, I’ll probably try to automate it.",
+                "Most of my time goes into designing scalable APIs, building reliable data extraction pipelines, and wiring up secure authentication flows. I’m equally comfortable deep in backend logic or surfacing insights through dashboards that actually make sense.",
+                "I’ve shipped systems on the cloud, containerized them with Docker, and watched them handle real users at real scale. I care about clean architecture, fast performance, and building software that doesn’t panic when traffic shows up."
             ],
             "currentStatus": {
-                "role": "Software Developer",
+                "role": "Software Development Engineer",
                 "company": "Tranzita Systems",
                 "location": "India",
                 "learning": [
-                    "Next.js",
-                    "Rust",
-                    "Three.js"
+                    "Advanced System Design",
+                    "Cloud Architecture",
+                    "Data Engineering",
+                    "Security Best Practices"
                 ],
-                "coffee_level": "High"
+                "coffee_level": "Medium-High"
             }
         }
     },
@@ -30,14 +31,15 @@
         "greeting": "> HELLO_WORLD",
         "headline": "I am {name}.",
         "subheadline": [
-            "Full Stack Software Developer at <strong>{company}</strong>.",
-            "Building high-performance systems with precision."
+            "Software Development Engineer at <strong>{company}</strong>.",
+            "Building scalable systems and automation-driven solutions."
         ],
         "cta": [
             {
-                "text": "View Projects",
-                "href": "#projects",
-                "variant": "primary"
+                "text": "Download Resume",
+                "href": "/Abhi_Saxena_Resume.pdf",
+                "variant": "primary",
+                "download": "Abhi_Saxena_Resume.pdf"
             },
             {
                 "text": "Contact Me",
@@ -47,14 +49,14 @@
         ],
         "terminal": {
             "initialMessages": [
-                "Loading developer profile...",
-                "Fetching skills from database...",
-                "Optimizing performance...",
+                "Initializing profile...",
+                "Loading experience...",
+                "Fetching tech stack...",
                 "Ready."
             ],
             "modalMessages": [
-                "Welcome to my interactive terminal!",
-                "Type 'help' to see available commands."
+                "Welcome!",
+                "Type 'help' to explore my profile."
             ]
         }
     },
@@ -69,70 +71,116 @@
             {
                 "category": "Frontend",
                 "items": [
-                    "React",
+                    "React.js",
                     "Next.js",
+                    "HTML",
+                    "CSS",
                     "Tailwind CSS",
-                    "GSAP",
-                    "Three.js"
+                    "Material UI"
                 ]
             },
             {
                 "category": "Backend",
                 "items": [
                     "Node.js",
-                    "Express",
-                    "PostgreSQL",
-                    "Prisma",
-                    "Redis"
+                    "Express.js",
+                    "Java Spring Boot",
+                    "Flask",
+                    "FastAPI",
+                    "Firebase",
+                    "OAuth 2.0"
                 ]
             },
             {
-                "category": "DevOps & Tools",
+                "category": "Databases",
+                "items": [
+                    "MySQL",
+                    "PostgreSQL",
+                    "MS SQL Server",
+                    "Azure Blob Storage",
+                    "SAP Data Integrations"
+                ]
+            },
+            {
+                "category": "DevOps & Cloud",
                 "items": [
                     "Docker",
+                    "Azure",
                     "AWS",
                     "Git",
-                    "Figma",
-                    "Linux"
+                    "Linux",
+                    "Google Cloud Platform",
+                    "CI/CD Pipelines"
+                ]
+            },
+            {
+                "category": "Data & Libraries",
+                "items": [
+                    "pandas",
+                    "NumPy",
+                    "PySpark",
+                    "Matplotlib",
+                    "OCR (Tesseract)",
+                    "Azure DataBricks"
                 ]
             }
         ]
     },
     "projects": {
         "sectionNumber": "03",
-        "title": "Selected Projects",
+        "title": "Projects Showcase",
         "items": [
             {
-                "title": "Tranzita Landing Page",
-                "description": "High-performance landing page with scroll-driven animations and complex 3D transforms.",
+                "title": "Procter & Gamble Enterprise Automation",
+                "description": "Enterprise-grade automation and analytics systems for SAP financial data, consumer surveys, and compliance workflows.",
                 "tech": [
-                    "Next.js",
-                    "GSAP",
-                    "Three.js"
+                    "Python",
+                    "Azure Functions",
+                    "Node.js",
+                    "SQL",
+                    "Docker",
+                    "OAuth",
+                    "Keycloak"
+                ],
+                "type": "Enterprise",
+                "link": "#"
+            },
+            {
+                "title": "Jagruk Bharat – Government Scheme Portal",
+                "description": "A scalable government portal enabling Indian citizens to access welfare schemes and track applications.",
+                "tech": [
+                    "Java Spring Boot",
+                    "PostgreSQL",
+                    "AWS",
+                    "Docker"
                 ],
                 "type": "Production",
                 "link": "#"
             },
             {
-                "title": "E-Commerce Dashboard",
-                "description": "Real-time analytics dashboard with heavy data visualization and optimistic UI updates.",
+                "title": "Mind Gauge – Psychometric Testing Platform",
+                "description": "A psychometric testing and analytics platform for student assessment and result visualization.",
                 "tech": [
-                    "React",
-                    "D3.js",
-                    "Socket.io"
+                    "Next.js",
+                    "Node.js",
+                    "MySQL",
+                    "Data Visualization"
                 ],
-                "type": "Personal",
+                "type": "Product",
                 "link": "#"
             },
             {
-                "title": "API Gateway Service",
-                "description": "High-throughput node.js service handling thousands of requests per second.",
+                "title": "Voterium – Blockchain-Based E-Voting System",
+                "description": "A secure blockchain voting system with smart contracts and wallet-based authentication.",
                 "tech": [
+                    "Solidity",
+                    "Truffle",
                     "Node.js",
-                    "Redis",
-                    "Docker"
+                    "SQL",
+                    "MetaMask",
+                    "Ganache"
                 ],
-                "type": "Backend",
+                "type": "Academic",
                 "link": "#"
             }
         ]
@@ -143,21 +191,13 @@
         "items": [
             {
                 "company": "Tranzita Systems",
-                "role": "Software Developer",
-                "period": "2023 - Present",
+                "role": "Software Development Engineer",
+                "period": "Nov 2023 – Present",
                 "description": [
-                    "Architected and maintained core microservices handling high-frequency data.",
-                    "Optimized frontend performance, reducing TTI by 40% using Next.js optimization techniques.",
-                    "Collaborated with cross-functional teams to deliver pixel-perfect UI/UX."
-                ]
-            },
-            {
-                "company": "Freelance",
-                "role": "Full Stack Developer",
-                "period": "2021 - 2023",
-                "description": [
-                    "Delivered custom web solutions for clients in E-commerce and EdTech.",
-                    "Built performant REST APIs using Node.js and Express."
+                    "Developed and optimized automation pipelines, significantly reducing manual data extraction efforts.",
+                    "Designed scalable backend services using Python, Node.js, and SQL.",
+                    "Integrated secure authentication and role-based access control using OAuth and Keycloak.",
+                    "Built dashboards and analytics systems to improve business decision-making."
                 ]
             }
         ]
@@ -166,12 +206,11 @@
         "sectionNumber": "05",
         "title": "Get In Touch",
         "subtitle": "What's Next?",
-        "description": "I'm currently open to new opportunities and interesting projects. Whether you have a question or just want to say hi, feel free to reach out!"
+        "description": "I’m open to software engineering roles and impactful projects. Feel free to reach out for opportunities, collaborations, or discussions."
     },
     "social": {
-        "github": "https://github.com/abhisaxena",
-        "linkedin": "https://linkedin.com/in/abhisaxena",
-        "twitter": "https://twitter.com/abhisaxena"
+        "github": "https://github.com/tusharsaxena01",
+        "linkedin": "https://linkedin.com/in/abhisaxena7007"
     },
     "terminal": {
         "commands": {
@@ -191,35 +230,31 @@
             "about": [
                 "Hi! I'm Abhi Saxena, a passionate Full Stack Developer.",
                 "I love building modern web applications with cutting-edge technologies.",
-                "Currently working at Tranzita Systems, crafting scalable solutions."
+                "Currently working at Tranzita Systems, crafting scalable solutions.",
+                "Focused on automation, scalable APIs, and cloud systems."
             ],
             "skills": [
-                "Technical Skills:",
-                "  • Frontend: React, Next.js, TypeScript, TailwindCSS",
-                "  • Backend: Node.js, Express, NestJS",
-                "  • Database: PostgreSQL, MongoDB, Redis",
-                "  • Tools: Git, Docker, GSAP, Framer Motion"
+                "Backend: Node.js, Python, Spring Boot",
+                "Frontend: React, Next.js",
+                "Cloud: Azure, AWS, Docker"
             ],
             "contact": [
-                "Contact Information:",
-                "  • Email: saxena.abhi7007@gmail.com",
-                "  • GitHub: github.com/abhisaxena",
-                "  • LinkedIn: linkedin.com/in/abhisaxena"
+                "Email: saxena.abhi7007@gmail.com",
+                "LinkedIn: linkedin.com/in/abhisaxena7007"
             ],
+            "whoami": "abhi@portfolio - Software Development Engineer",
             "projects": [
                 "Featured Projects:",
-                "  1. E-commerce Platform - Full-stack solution with Next.js",
-                "  2. Task Management App - Real-time collaboration tool",
-                "  3. Portfolio Website - You're looking at it! 🎨"
+                "  1. Procter & Gamble Enterprise Automation - Full-stack solution with Multiple Tech Stacks",
+                "  2. Jagruk Bharat – Government Scheme Portal",
+                "  3. Mind Gauge – Psychometric Testing Platform",
+                "  4. Voterium – Blockchain-Based E-Voting System",
+                "  5. Portfolio Website - You're looking at it!"
             ],
             "experience": [
                 "Work Experience:",
-                "  • Tranzita Systems (2023 - Present)",
-                "    Software Developer",
-                "  • Freelance (2021 - 2023)",
-                "    Full Stack Developer"
-            ],
-            "whoami": "abhi@portfolio - Full Stack Developer"
+                "  • Tranzita Systems (2023 - Present) - Software Development Engineer"
+            ]
         }
     },
     "navbar": {
@@ -247,6 +282,6 @@
         ]
     },
     "footer": {
-        "text": "Built with Next.js, GSAP, and ☕"
+        "text": "Built with Next.js and deployed with GitHub Pages 💻"
     }
 }
