@@ -77,7 +77,7 @@ export interface PortfolioData {
     social: {
         github: string;
         linkedin: string;
-        twitter: string;
+        twitter?: string;
     };
     terminal: {
         commands: Record<string, string | string[]>;
