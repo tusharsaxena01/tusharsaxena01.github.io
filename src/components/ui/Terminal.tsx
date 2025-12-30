@@ -150,7 +150,7 @@ export const Terminal: React.FC<TerminalProps> = ({
         }
     };
 
-    const handleKeyDown = (e: KeyboardEvent<HTMLInputElement>) => {
+    const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
         // Stop propagation to prevent page navigation
         e.stopPropagation();
 
