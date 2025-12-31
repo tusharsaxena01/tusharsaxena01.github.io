@@ -1,6 +1,32 @@
 import React, { useEffect, useRef } from 'react';
 
-const FuzzyText = ({
+interface ExtendedHTMLCanvasElement extends HTMLCanvasElement {
+    cleanupFuzzyText?: () => void;
+}
+
+interface FuzzyTextProps {
+    children: React.ReactNode;
+    fontSize?: string | number;
+    fontWeight?: number;
+    fontFamily?: string;
+    color?: string;
+    enableHover?: boolean;
+    baseIntensity?: number;
+    hoverIntensity?: number;
+    fuzzRange?: number;
+    fps?: number;
+    direction?: 'horizontal' | 'vertical' | 'both';
+    transitionDuration?: number;
+    clickEffect?: boolean;
+    glitchMode?: boolean;
+    glitchInterval?: number;
+    glitchDuration?: number;
+    gradient?: string[] | null;
+    letterSpacing?: number;
+    className?: string;
+}
+
+const FuzzyText: React.FC<FuzzyTextProps> = ({
     children,
     fontSize = 'clamp(2rem, 10vw, 10rem)',
     fontWeight = 900,
@@ -21,15 +47,15 @@ const FuzzyText = ({
     letterSpacing = 0,
     className = ''
 }) => {
-    const canvasRef = useRef(null);
+    const canvasRef = useRef<HTMLCanvasElement>(null);
 
     useEffect(() => {
-        let animationFrameId;
+        let animationFrameId: number;
         let isCancelled = false;
-        let glitchTimeoutId;
-        let glitchEndTimeoutId;
-        let clickTimeoutId;
-        const canvas = canvasRef.current;
+        let glitchTimeoutId: NodeJS.Timeout;
+        let glitchEndTimeoutId: NodeJS.Timeout;
+        let clickTimeoutId: NodeJS.Timeout;
+        const canvas = canvasRef.current as ExtendedHTMLCanvasElement;
         if (!canvas) return;
 
         const init = async () => {
@@ -150,7 +176,7 @@ const FuzzyText = ({
 
             if (glitchMode) startGlitchLoop();
 
-            const run = timestamp => {
+            const run = (timestamp: number) => {
                 if (isCancelled) return;
 
                 if (timestamp - lastFrameTime < frameDuration) {
@@ -222,11 +248,11 @@ const FuzzyText = ({
 
             animationFrameId = window.requestAnimationFrame(run);
 
-            const isInsideTextArea = (x, y) => {
+            const isInsideTextArea = (x: number, y: number) => {
                 return x >= interactiveLeft && x <= interactiveRight && y >= interactiveTop && y <= interactiveBottom;
             };
 
-            const handleMouseMove = e => {
+            const handleMouseMove = (e: MouseEvent) => {
                 if (!enableHover) return;
                 const rect = canvas.getBoundingClientRect();
                 const x = e.clientX - rect.left;
@@ -247,7 +273,7 @@ const FuzzyText = ({
                 }, 150);
             };
 
-            const handleTouchMove = e => {
+            const handleTouchMove = (e: TouchEvent) => {
                 if (!enableHover) return;
                 e.preventDefault();
                 const rect = canvas.getBoundingClientRect();
