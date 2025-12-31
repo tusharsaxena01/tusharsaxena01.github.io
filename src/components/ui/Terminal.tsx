@@ -205,48 +205,48 @@ export const Terminal: React.FC<TerminalProps> = ({
         <div
             ref={containerRef}
             className={cn(
-                "rounded-lg border border-slate-800 bg-slate-950/80 p-6 shadow-2xl backdrop-blur-sm font-mono text-sm sm:text-base",
+                "rounded-xl border border-stone-800 bg-stone-950/80 p-2 sm:p-6 shadow-2xl backdrop-blur-sm font-mono text-xs sm:text-sm",
                 isModalOpen && "w-full max-w-4xl mx-auto",
                 className
             )}
             onClick={focusInput}
         >
-            <div className="flex gap-2 mb-4 border-b border-slate-800 pb-2 items-center">
+            <div className="flex gap-2 mb-3 sm:mb-4 border-b border-slate-800 pb-2 items-center">
                 <div
-                    className="h-3 w-3 rounded-full bg-red-500/80 cursor-pointer hover:bg-red-400 transition-colors"
+                    className="h-2.5 w-2.5 sm:h-3 sm:w-3 rounded-full bg-red-500/80 cursor-pointer hover:bg-red-400 transition-colors touch-manipulation"
                     onClick={handleClose}
                     title="Close"
                 />
                 <div
-                    className="h-3 w-3 rounded-full bg-yellow-500/80 cursor-pointer hover:bg-yellow-400 transition-colors"
+                    className="h-2.5 w-2.5 sm:h-3 sm:w-3 rounded-full bg-yellow-500/80 cursor-pointer hover:bg-yellow-400 transition-colors touch-manipulation"
                     onClick={handleClose}
                     title="Minimize"
                 />
                 <div
-                    className="h-3 w-3 rounded-full bg-green-500/80 cursor-pointer hover:bg-green-400 transition-colors"
+                    className="h-2.5 w-2.5 sm:h-3 sm:w-3 rounded-full bg-green-500/80 cursor-pointer hover:bg-green-400 transition-colors touch-manipulation"
                     onClick={handleClose}
                     title="Maximize"
                 />
-                <span className="ml-2 text-xs text-slate-500 flex-1">Terminal</span>
+                <span className="ml-2 text-xs text-slate-500 flex-1">Interactive Terminal</span>
             </div>
 
             <div
                 ref={outputRef}
                 className={cn(
                     "space-y-1 text-slate-300 overflow-y-auto scrollbar-thin scrollbar-thumb-slate-700 scrollbar-track-transparent",
-                    isModalOpen ? "max-h-[60vh]" : "max-h-96"
+                    isModalOpen ? "max-h-[50vh] sm:max-h-[60vh]" : "max-h-64 sm:max-h-96"
                 )}
             >
                 {history.map((line, i) => (
                     <div key={i} className="flex flex-col">
                         {line.type === 'command' ? (
-                            <div className="flex">
-                                <span className="mr-2 text-sky-400">abhi@portfolio:~$</span>
-                                <span className="text-green-400">{line.content}</span>
+                            <div className="flex flex-wrap">
+                                <span className="mr-2 text-sky-400 whitespace-nowrap">abhi@portfolio:~$</span>
+                                <span className="text-green-400 break-all">{line.content}</span>
                             </div>
                         ) : (
                             <div className={cn(
-                                "ml-1",
+                                "ml-1 break-words",
                                 line.type === 'error' && "text-red-400"
                             )}>
                                 {line.content}
@@ -256,17 +256,17 @@ export const Terminal: React.FC<TerminalProps> = ({
                 ))}
 
                 {isInitialized && isActive && (
-                    <div className="flex items-center">
-                        <span className="mr-2 text-sky-400">abhi@portfolio:~$</span>
-                        <div className="flex-1 flex items-center">
+                    <div className="flex items-center flex-wrap">
+                        <span className="mr-2 text-sky-400 whitespace-nowrap">abhi@portfolio:~$</span>
+                        <div className="flex-1 flex items-center min-w-0">
                             <input
                                 ref={inputRef}
                                 type="text"
                                 value={currentInput}
                                 onChange={(e) => setCurrentInput(e.target.value)}
                                 onKeyDown={handleKeyDown}
-                                className="bg-transparent outline-none text-slate-300 caret-transparent"
-                                style={{ width: `${Math.max(1, currentInput.length)} ch` }}
+                                className="bg-transparent outline-none text-slate-300 caret-transparent w-full"
+                                style={{ minWidth: `${Math.max(1, currentInput.length)}ch` }}
                                 autoFocus
                                 spellCheck={false}
                             />
@@ -290,7 +290,7 @@ export const Terminal: React.FC<TerminalProps> = ({
     if (isModalOpen) {
         return (
             <div
-                className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/70 backdrop-blur-sm animate-in fade-in duration-200"
+                className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-4 bg-black/70 backdrop-blur-sm animate-in fade-in duration-200"
                 onClick={handleBackdropClick}
             >
                 {terminalContent}

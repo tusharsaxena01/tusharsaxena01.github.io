@@ -18,8 +18,22 @@ export const Navbar = () => {
         return () => window.removeEventListener("scroll", handleScroll);
     }, []);
 
+    // Prevent body scroll when mobile menu is open
+    useEffect(() => {
+        if (mobileMenuOpen) {
+            document.body.style.overflow = 'hidden';
+        } else {
+            document.body.style.overflow = 'unset';
+        }
+        return () => {
+            document.body.style.overflow = 'unset';
+        };
+    }, [mobileMenuOpen]);
+
     const toggleMenu = () => {
         if (!mobileMenuOpen) {
+            // Scroll to top to ensure menu is properly positioned
+            window.scrollTo({ top: 0, behavior: 'smooth' });
             setMobileMenuOpen(true);
             gsap.fromTo(".mobile-menu-item",
                 { x: 50, opacity: 0 },
@@ -38,19 +52,19 @@ export const Navbar = () => {
             className={cn(
                 "fixed top-0 left-0 right-0 z-50 transition-all duration-300 border-b border-transparent",
                 scrolled
-                    ? "bg-slate-950/80 backdrop-blur-md border-slate-800 py-4"
-                    : "bg-transparent py-6"
+                    ? "bg-slate-950/80 backdrop-blur-md border-slate-800 py-3 sm:py-4"
+                    : "bg-transparent py-4 sm:py-6"
             )}
         >
-            <div className="container mx-auto px-6 flex items-center justify-between">
-                <div className="font-mono font-bold text-xl tracking-tighter text-sky-400 z-50 relative">
+            <div className="container mx-auto px-4 sm:px-6 flex items-center justify-between">
+                <div className="font-mono font-bold text-lg sm:text-xl tracking-tighter text-sky-400 z-50 relative touch-manipulation">
                     <a href="/">
                         &lt;{data.personal.initials} /&gt;
                     </a>
                 </div>
 
                 {/* Desktop Menu */}
-                <ul className="hidden md:flex gap-8">
+                <ul className="hidden md:flex gap-6 lg:gap-8">
                     {data.navbar.links.map((item, index) => (
                         <li key={item.name}>
                             <a
@@ -68,7 +82,7 @@ export const Navbar = () => {
 
                 {/* Mobile Menu Button */}
                 <button
-                    className="md:hidden text-slate-400 z-50 relative focus:outline-none"
+                    className="md:hidden text-slate-400 z-50 relative focus:outline-none touch-manipulation px-2 py-1 text-sm sm:text-base"
                     onClick={toggleMenu}
                 >
                     {mobileMenuOpen ? "Close" : "Menu"}
@@ -76,12 +90,12 @@ export const Navbar = () => {
 
                 {/* Mobile Menu Overlay */}
                 {mobileMenuOpen && (
-                    <div className="fixed inset-0 bg-slate-950/95 backdrop-blur-xl z-40 flex flex-col items-center justify-center space-y-8 md:hidden">
+                    <div className="fixed top-0 left-0 right-0 bottom-0 bg-slate-950/95 backdrop-blur-xl z-40 flex flex-col items-center justify-center space-y-6 sm:space-y-8 md:hidden overflow-hidden">
                         {data.navbar.links.map((item) => (
                             <a
                                 key={item.name}
                                 href={item.href}
-                                className="mobile-menu-item text-2xl font-bold text-white hover:text-sky-400 transition-colors"
+                                className="mobile-menu-item text-xl sm:text-2xl font-bold text-white hover:text-sky-400 transition-colors touch-manipulation"
                                 onClick={() => setMobileMenuOpen(false)}
                             >
                                 {item.name}

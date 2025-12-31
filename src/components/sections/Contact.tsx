@@ -62,16 +62,16 @@ export const Contact = () => {
         <section
             id="contact"
             ref={container}
-            className="py-6 px-6 lg:px-20 max-w-4xl mx-auto text-center"
+            className="py-12 sm:py-16 lg:py-20 px-4 sm:px-6 lg:px-20 max-w-4xl mx-auto text-center"
         >
-            <div className="mb-12">
-                <p className="text-sky-500 font-mono mb-4">
+            <div className="mb-8 sm:mb-12">
+                <p className="text-sky-500 font-mono mb-3 sm:mb-4 text-sm sm:text-base">
                     {data.contact.sectionNumber}. {data.contact.subtitle}
                 </p>
-                <h2 className="text-4xl lg:text-5xl font-bold text-white mb-6">
+                <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-white mb-4 sm:mb-6">
                     {data.contact.title}
                 </h2>
-                <p className="text-slate-400 max-w-xl mx-auto">
+                <p className="text-sm sm:text-base text-slate-400 max-w-xl mx-auto">
                     {data.contact.description}
                 </p>
             </div>
@@ -79,12 +79,12 @@ export const Contact = () => {
             {status !== "success" ? (
                 <form
                     onSubmit={handleSubmit}
-                    className="contact-form space-y-4 max-w-md mx-auto text-left"
+                    className="contact-form space-y-3 sm:space-y-4 max-w-md mx-auto text-left"
                 >
                     <div>
                         <label
                             htmlFor="email"
-                            className="block text-sm font-mono text-slate-400 mb-2"
+                            className="block text-xs sm:text-sm font-mono text-slate-400 mb-2"
                         >
                             Your email
                         </label>
@@ -93,7 +93,7 @@ export const Contact = () => {
                             type="email"
                             name="email"
                             id="email"
-                            className="w-full bg-slate-900 border border-slate-700 rounded p-3 text-white focus:border-sky-500 outline-none transition-colors"
+                            className="w-full bg-slate-900 border border-slate-700 rounded p-3 text-sm sm:text-base text-white focus:border-sky-500 outline-none transition-colors touch-manipulation"
                             placeholder="user@example.com"
                         />
                     </div>
@@ -101,7 +101,7 @@ export const Contact = () => {
                     <div>
                         <label
                             htmlFor="message"
-                            className="block text-sm font-mono text-slate-400 mb-2"
+                            className="block text-xs sm:text-sm font-mono text-slate-400 mb-2"
                         >
                             Your message
                         </label>
@@ -110,7 +110,7 @@ export const Contact = () => {
                             name="message"
                             id="message"
                             rows={4}
-                            className="w-full bg-slate-900 border border-slate-700 rounded p-3 text-white focus:border-sky-500 outline-none transition-colors"
+                            className="w-full bg-slate-900 border border-slate-700 rounded p-3 text-sm sm:text-base text-white focus:border-sky-500 outline-none transition-colors touch-manipulation resize-none"
                             placeholder="Hello world..."
                         />
                     </div>
@@ -118,28 +118,28 @@ export const Contact = () => {
                     <button
                         type="submit"
                         disabled={status === "submitting"}
-                        className="w-full py-4 bg-sky-600 hover:bg-sky-500 text-white font-bold rounded transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                        className="w-full py-3 sm:py-4 bg-sky-600 hover:bg-sky-500 text-white font-bold rounded transition-colors disabled:opacity-50 disabled:cursor-not-allowed touch-manipulation text-sm sm:text-base"
                     >
                         {status === "submitting" ? "Sending..." : "Send Message"}
                     </button>
 
                     {status === "error" && (
-                        <p className="text-red-400 font-mono text-sm">
+                        <p className="text-red-400 font-mono text-xs sm:text-sm">
                             Something went wrong. Please try again.
                         </p>
                     )}
                 </form>
             ) : (
-                <div className="success-message p-8 border border-green-500/30 bg-green-500/10 rounded text-green-400 font-mono">
+                <div className="success-message p-6 sm:p-8 border border-green-500/30 bg-green-500/10 rounded text-green-400 font-mono text-sm sm:text-base">
                     <p>&gt; Message transmission successful.</p>
                     <p>&gt; I will get back to you shortly.</p>
                 </div>
             )}
 
-            <div className="my-10">
+            <div className="my-8 sm:my-10">
                 <a
                     href={`mailto:${data.personal.email}`}
-                    className="font-mono text-slate-500 hover:text-sky-400 transition-colors"
+                    className="font-mono text-xs sm:text-sm text-slate-500 hover:text-sky-400 transition-colors"
                 >
                     {data.personal.email}
                 </a>

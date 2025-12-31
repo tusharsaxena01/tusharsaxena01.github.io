@@ -37,28 +37,27 @@ export const About = () => {
     }, { scope: container });
 
     return (
-        <section id="about" ref={container} className="py-32 px-6 lg:px-20 relative">
+        <section id="about" ref={container} className="py-20 sm:py-28 lg:py-32 px-4 sm:px-6 lg:px-20 relative">
             <div className="absolute top-0 left-0 w-full h-px bg-gradient-to-r from-transparent via-slate-700 to-transparent opacity-50" />
-
-            <div className="max-w-4xl mx-auto">
-                <h2 className="about-title text-3xl font-bold mb-12 flex items-center gap-4 text-white">
-                    <span className="text-sky-500 font-mono text-xl">{data.about.sectionNumber}.</span>
+            <div className="max-w-8xl mx-auto">
+                <h2 className="about-title text-2xl sm:text-3xl font-bold mb-8 sm:mb-12 flex items-center gap-3 sm:gap-4 text-white">
+                    <span className="text-sky-500 font-mono text-lg sm:text-xl">{data.about.sectionNumber}.</span>
                     {data.about.title}
                 </h2>
 
-                <div className="grid md:grid-cols-3 gap-12">
-                    <div className="md:col-span-2 space-y-6 text-slate-300 leading-relaxed font-light about-text">
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-8 sm:gap-12">
+                    <div className="md:col-span-2 space-y-4 sm:space-y-6 text-sm sm:text-base text-slate-300 leading-relaxed font-light about-text">
                         {data.personal.bio.paragraphs.map((paragraph, index) => (
                             <p key={index} dangerouslySetInnerHTML={{ __html: paragraph }} />
                         ))}
                     </div>
 
-                    <div className="about-text p-6 border border-slate-800 bg-slate-900/50 rounded-lg font-mono text-xs text-slate-400 relative overflow-hidden group">
+                    <div className="about-text p-4 sm:p-6 border border-slate-800 bg-slate-900/50 rounded-lg font-mono text-xs text-slate-400 relative overflow-hidden group">
                         <div className="absolute inset-0 bg-sky-500/5 opacity-0 group-hover:opacity-100 transition-opacity" />
-                        <div className="mb-4 text-sky-500">
+                        <div className="mb-3 sm:mb-4 text-sky-500">
                     // current_status.json
                         </div>
-                        <pre className="space-y-1">
+                        <pre className="space-y-1 overflow-x-auto">
                             {JSON.stringify(data.personal.bio.currentStatus, null, 2)}
                         </pre>
                     </div>

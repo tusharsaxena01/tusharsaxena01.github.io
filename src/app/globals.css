@@ -3,6 +3,10 @@
 @tailwind utilities;
 
 @layer base {
+  html {
+    scroll-behavior: smooth;
+  }
+
   body {
     @apply bg-slate-950 text-gray-200 overflow-x-hidden;
   }
@@ -11,6 +15,13 @@
 /* Custom Scrollbar */
 ::-webkit-scrollbar {
   width: 8px;
+}
+
+/* Thinner scrollbar on mobile */
+@media (max-width: 767px) {
+  ::-webkit-scrollbar {
+    width: 4px;
+  }
 }
 
 ::-webkit-scrollbar-track {
@@ -24,4 +35,29 @@
 
 ::-webkit-scrollbar-thumb:hover {
   background: #334155;
+}
+
+/* Mobile-specific utilities */
+@layer utilities {
+  .touch-manipulation {
+    touch-action: manipulation;
+  }
+
+  .no-tap-highlight {
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  /* Prevent text selection on interactive elements */
+  .select-none-touch {
+    -webkit-user-select: none;
+    user-select: none;
+  }
+}
+
+/* Improve touch target sizes on mobile */
+@media (max-width: 767px) {
+  button, a {
+    min-height: 44px;
+    min-width: 44px;
+  }
 }
