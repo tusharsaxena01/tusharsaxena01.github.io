@@ -85,14 +85,14 @@ export const Contact = () => {
                         {status !== "success" ? (
                             <form
                                 onSubmit={handleSubmit}
-                                className="contact-form space-y-4 sm:space-y-5"
+                                className="contact-form space-y-7 sm:space-y-8"
                             >
                                 <div>
                                     <label
                                         htmlFor="name"
                                         className="block text-xs sm:text-sm font-mono text-slate-400 mb-2"
                                     >
-                                        Your name
+                                        Your Name
                                     </label>
                                     <input
                                         required
@@ -109,7 +109,7 @@ export const Contact = () => {
                                         htmlFor="email"
                                         className="block text-xs sm:text-sm font-mono text-slate-400 mb-2"
                                     >
-                                        Your email
+                                        Your Email
                                     </label>
                                     <input
                                         required
@@ -126,7 +126,7 @@ export const Contact = () => {
                                         htmlFor="message"
                                         className="block text-xs sm:text-sm font-mono text-slate-400 mb-2"
                                     >
-                                        Your message
+                                        Your Message
                                     </label>
                                     <textarea
                                         required
@@ -164,7 +164,7 @@ export const Contact = () => {
                     <div className="space-y-6">
                         <div className="p-6 sm:p-8 border border-slate-800 bg-slate-900/50 rounded-lg">
                             <h3 className="text-lg sm:text-xl font-bold text-white mb-4 font-mono">
-                                &gt; Direct Contact
+                                &gt; Contact me Directly
                             </h3>
                             <div className="space-y-3">
                                 <a
