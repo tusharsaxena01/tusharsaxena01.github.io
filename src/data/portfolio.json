@@ -187,7 +187,7 @@
     },
     "experience": {
         "sectionNumber": "04",
-        "title": "Experience",
+        "title": "Professional Experience",
         "items": [
             {
                 "company": "Tranzita Systems",
@@ -195,7 +195,7 @@
                 "period": "Nov 2023 – Present",
                 "description": [
                     "Developed and optimized automation pipelines, significantly reducing manual data extraction efforts.",
-                    "Designed scalable backend services using Python, Node.js, and SQL.",
+                    "Designed scalable backend services using Python, Node.js, Java Spring Boot, and SQL.",
                     "Integrated secure authentication and role-based access control using OAuth and Keycloak.",
                     "Built dashboards and analytics systems to improve business decision-making."
                 ]
