@@ -5,6 +5,7 @@ export interface PortfolioData {
         name: string;
         initials: string;
         role: string;
+        phone: string;
         company: string;
         location: string;
         email: string;
