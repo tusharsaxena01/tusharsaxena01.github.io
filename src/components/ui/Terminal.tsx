@@ -4,6 +4,7 @@ import React, { useEffect, useRef, useState } from "react";
 import { cn } from "@/utils/cn";
 import { usePortfolioData } from "@/hooks/usePortfolioData";
 import { prefersReducedMotion, sleep } from "@/utils/motion";
+import { Scramble } from "../fx/Scramble";
 
 interface Line {
     type: "command" | "output" | "error";
@@ -31,6 +32,7 @@ export const Terminal = ({ autorun = [], className }: { autorun?: string[]; clas
         if (c === "clear") return setHistory([]);
         const out =
             c === "date" ? new Date().toLocaleString()
+            : c.startsWith("echo ") ? cmd.trim().slice(5).replace(/^["']|["']$/g, "")
             : c === "status" ? JSON.stringify(data.personal.bio.currentStatus, null, 2).split("\n")
             : data.terminal.commands[c];
         setHistory((h) => [
@@ -91,7 +93,7 @@ export const Terminal = ({ autorun = [], className }: { autorun?: string[]; clas
 
     return (
         <div ref={rootRef} className={cn("frame flex flex-col p-0", className)} onClick={() => inputRef.current?.focus()}>
-            <span className="frame-label">[ TTY.01 ]</span>
+            <span className="frame-label"><Scramble en="[ TTY.०१ ]" /></span>
             <div className="meta flex justify-between border-b border-line px-5 py-3">
                 <span>~/abhi — zsh</span>
                 <span className={ready ? "text-green" : ""}>{ready ? "interactive" : "running"}</span>
@@ -99,15 +101,15 @@ export const Terminal = ({ autorun = [], className }: { autorun?: string[]; clas
             <div ref={outputRef} className="h-80 space-y-1 overflow-y-auto p-5 text-sm">
                 {history.map((l, i) =>
                     l.type === "command" ? (
-                        <p key={i} className="break-all"><span className="mr-2 text-green">{PROMPT}</span>{l.content}</p>
+                        <p key={i} className="break-all"><span className="mr-2 text-marigold">{PROMPT}</span>{l.content}</p>
                     ) : (
-                        <p key={i} className={cn("whitespace-pre-wrap break-words", l.type === "error" ? "text-dim" : "text-ink")}>
+                        <p key={i} className={cn("whitespace-pre-wrap break-words", l.type === "error" ? "text-sindoor" : "text-ink")}>
                             {l.content}
                         </p>
                     )
                 )}
                 <label className="flex gap-2">
-                    <span className="shrink-0 text-green">{PROMPT}</span>
+                    <span className="shrink-0 text-marigold">{PROMPT}</span>
                     <input
                         ref={inputRef}
                         value={input}
@@ -117,7 +119,7 @@ export const Terminal = ({ autorun = [], className }: { autorun?: string[]; clas
                         aria-label="Terminal command, type help"
                         spellCheck={false}
                         autoComplete="off"
-                        className="min-w-0 flex-1 bg-transparent caret-[var(--green)] outline-none focus-visible:outline-none"
+                        className="min-w-0 flex-1 bg-transparent caret-[var(--saffron)] outline-none focus-visible:outline-none"
                     />
                 </label>
                 {ready && history.length < 20 && <p className="meta pt-2">{"// click and type 'help'"}</p>}

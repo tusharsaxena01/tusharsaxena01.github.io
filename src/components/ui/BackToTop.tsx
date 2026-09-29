@@ -17,7 +17,7 @@ export const BackToTop = () => {
             href="#top"
             aria-label="Back to top"
             className={cn(
-                "btn fixed bottom-6 right-6 z-50 px-3 py-2 text-xs text-green transition-opacity",
+                "btn fixed bottom-6 right-6 z-50 px-3 py-2 text-xs text-marigold transition-opacity",
                 !visible && "pointer-events-none opacity-0"
             )}
         >
