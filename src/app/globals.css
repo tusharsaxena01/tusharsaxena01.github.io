@@ -2,62 +2,236 @@
 @tailwind components;
 @tailwind utilities;
 
+@property --corner-len { syntax: "<length>"; inherits: true; initial-value: 18px; }
+@property --c { syntax: "<color>"; inherits: true; initial-value: #00b36e; }
+
+:root {
+  --bg-0: #05070a;
+  --bg-1: #0a0f14;
+  --bg-2: #0f1720;
+  --line: #14202b;
+  --green: #00ff9c;
+  --green-dim: #00b36e;
+  --green-glow: rgba(0, 255, 156, .35);
+  --cyan: #00e5ff;
+  --magenta: #ff2bd6;
+  --text: #cfe8dc;
+  --text-dim: #6f8a7e;
+  --corner-len: 18px;
+  --corner-w: 2px;
+  --ease: cubic-bezier(.2, .8, .2, 1);
+  color-scheme: dark;
+}
+
 @layer base {
-  html {
-    scroll-behavior: smooth;
-  }
-
-  body {
-    @apply bg-slate-950 text-gray-200 overflow-x-hidden;
-  }
+  html { scroll-behavior: smooth; scroll-padding-top: 72px; }
+  body { @apply bg-bg-0 text-ink font-mono overflow-x-hidden; font-size: 16px; line-height: 1.6; }
+  h1, h2, h3 { @apply font-display uppercase; letter-spacing: .04em; }
+  :focus-visible { outline: 2px solid var(--green); outline-offset: 3px; }
+  ::selection { background: var(--green); color: var(--bg-0); }
+  ::-webkit-scrollbar { width: 6px; }
+  ::-webkit-scrollbar-track { background: var(--bg-0); }
+  ::-webkit-scrollbar-thumb { background: var(--green-dim); }
 }
 
-/* Custom Scrollbar */
-::-webkit-scrollbar {
-  width: 8px;
-}
-
-/* Thinner scrollbar on mobile */
-@media (max-width: 767px) {
-  ::-webkit-scrollbar {
-    width: 4px;
+@layer components {
+  /* §3 corner-only brackets, no full outline anywhere */
+  .frame, .btn {
+    position: relative;
+    padding: 1.5rem;
+    --c: var(--green-dim);
+    background-image:
+      linear-gradient(var(--c), var(--c)), linear-gradient(var(--c), var(--c)),
+      linear-gradient(var(--c), var(--c)), linear-gradient(var(--c), var(--c)),
+      linear-gradient(var(--c), var(--c)), linear-gradient(var(--c), var(--c)),
+      linear-gradient(var(--c), var(--c)), linear-gradient(var(--c), var(--c));
+    background-repeat: no-repeat;
+    background-size:
+      var(--corner-len) var(--corner-w), var(--corner-w) var(--corner-len),
+      var(--corner-len) var(--corner-w), var(--corner-w) var(--corner-len),
+      var(--corner-len) var(--corner-w), var(--corner-w) var(--corner-len),
+      var(--corner-len) var(--corner-w), var(--corner-w) var(--corner-len);
+    background-position: 0 0, 0 0, 100% 0, 100% 0, 0 100%, 0 100%, 100% 100%, 100% 100%;
+    background-color: var(--bg-1);
+    transition: --c .2s, --corner-len .2s, filter .2s;
   }
-}
-
-::-webkit-scrollbar-track {
-  background: #020617;
-}
-
-::-webkit-scrollbar-thumb {
-  background: #1e293b;
-  border-radius: 4px;
-}
-
-::-webkit-scrollbar-thumb:hover {
-  background: #334155;
-}
-
-/* Mobile-specific utilities */
-@layer utilities {
-  .touch-manipulation {
-    touch-action: manipulation;
+  .frame:hover, .frame:focus-within, .btn:hover, .btn:focus-visible {
+    --c: var(--green);
+    --corner-len: 26px;
+    filter: drop-shadow(0 0 8px var(--green-glow));
   }
-
-  .no-tap-highlight {
-    -webkit-tap-highlight-color: transparent;
+  .btn {
+    @apply inline-flex items-center gap-2 text-sm uppercase;
+    padding: .8rem 1.4rem;
+    --corner-len: 10px;
+    letter-spacing: .08em;
   }
-
-  /* Prevent text selection on interactive elements */
-  .select-none-touch {
-    -webkit-user-select: none;
-    user-select: none;
+  .btn:hover, .btn:focus-visible { --corner-len: 16px; outline: none; }
+  .frame-label {
+    @apply absolute top-0 left-6 -translate-y-1/2 px-2 bg-bg-0 text-dim;
+    font-size: .75rem;
+    letter-spacing: .12em;
   }
+  .meta { font-size: .75rem; text-transform: uppercase; letter-spacing: .12em; color: var(--text-dim); }
+  .chip { @apply bg-bg-2 px-2 py-1 text-xs text-dim; }
 }
 
-/* Improve touch target sizes on mobile */
-@media (max-width: 767px) {
-  button, a {
-    min-height: 44px;
-    min-width: 44px;
-  }
+/* §4.1 glitch */
+.glitch { position: relative; display: inline-block; }
+.glitch::before, .glitch::after {
+  content: attr(data-text);
+  position: absolute;
+  inset: 0;
+  mix-blend-mode: screen;
+  pointer-events: none;
+  clip-path: inset(0 0 100% 0);
+}
+.glitch::before { color: var(--cyan); animation: glitch-a 3.5s steps(1) infinite; }
+.glitch::after { color: var(--magenta); animation: glitch-b 3.5s steps(1) infinite; }
+.glitch--hover::before, .glitch--hover::after { animation: none; }
+.glitch:hover::before, .group:hover .glitch--hover::before { animation: glitch-a .6s steps(1) infinite; animation-delay: -2.9s; }
+.glitch:hover::after, .group:hover .glitch--hover::after { animation: glitch-b .6s steps(1) infinite; animation-delay: -2.9s; }
+@keyframes glitch-a {
+  0%, 84%, 100% { clip-path: inset(0 0 100% 0); transform: none; }
+  86% { clip-path: inset(8% 0 70% 0); transform: translateX(-2px); }
+  89% { clip-path: inset(55% 0 20% 0); transform: translateX(2px) skewX(8deg); }
+  92% { clip-path: inset(30% 0 45% 0); transform: translateX(-3px); }
+  95% { clip-path: inset(80% 0 4% 0); transform: translateX(2px); }
+}
+@keyframes glitch-b {
+  0%, 84%, 100% { clip-path: inset(0 0 100% 0); transform: none; }
+  86% { clip-path: inset(62% 0 12% 0); transform: translateX(2px); }
+  89% { clip-path: inset(15% 0 60% 0); transform: translateX(-2px) skewX(-6deg); }
+  92% { clip-path: inset(40% 0 38% 0); transform: translateX(3px); }
+  95% { clip-path: inset(2% 0 85% 0); transform: translateX(-2px); }
+}
+
+/* §4.2 cursor block */
+.caret { color: var(--green); animation: blink 1s steps(2, start) infinite; }
+@keyframes blink { to { visibility: hidden; } }
+
+.pulse-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--green); box-shadow: 0 0 0 0 var(--green-glow); animation: pulse 1.6s ease-out infinite; }
+@keyframes pulse { to { box-shadow: 0 0 0 10px transparent; } }
+
+/* §5.6 scroll reveal (individual transform props so .tilt can own `transform`) */
+.js .reveal { perspective: 1000px; }
+.js .reveal > * {
+  opacity: 0;
+  translate: 0 40px;
+  rotate: x 12deg;
+  transition: opacity .6s var(--ease), translate .6s var(--ease), rotate .6s var(--ease);
+  transition-delay: calc(var(--i, 0) * 80ms);
+}
+.js .reveal.in > * { opacity: 1; translate: none; rotate: none; }
+
+/* §5.7 card tilt */
+.tilt {
+  transform: perspective(800px) rotateX(var(--rx, 0deg)) rotateY(var(--ry, 0deg));
+  transition: transform .2s var(--ease), --c .2s, --corner-len .2s, filter .2s;
+}
+.tilt::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: radial-gradient(260px circle at var(--mx, 50%) var(--my, 50%), rgba(0, 255, 156, .08), transparent 70%);
+  opacity: 0;
+  transition: opacity .2s;
+}
+.tilt:hover::after { opacity: 1; }
+
+/* §5.1 CSS 3D cube */
+.cube-stage { perspective: 900px; }
+.cube-tilt { transform-style: preserve-3d; transform: rotateX(var(--tx, 0deg)) rotateY(var(--ty, 0deg)); }
+.cube { --s: clamp(90px, 18vw, 170px); position: relative; width: var(--s); height: var(--s); transform-style: preserve-3d; animation: spin 20s linear infinite; }
+.cube--inner { --s: clamp(44px, 8vw, 80px); position: absolute; top: 50%; left: 50%; margin: calc(var(--s) / -2); animation: spin 12s linear infinite reverse; }
+.cube > i { position: absolute; inset: 0; border: 1px solid var(--green); background: rgba(0, 255, 156, .03); box-shadow: inset 0 0 24px rgba(0, 255, 156, .08); }
+.cube--inner > i { border-color: var(--green-dim); }
+.cube > i:nth-child(1) { transform: translateZ(calc(var(--s) / 2)); }
+.cube > i:nth-child(2) { transform: rotateY(180deg) translateZ(calc(var(--s) / 2)); }
+.cube > i:nth-child(3) { transform: rotateY(90deg) translateZ(calc(var(--s) / 2)); }
+.cube > i:nth-child(4) { transform: rotateY(-90deg) translateZ(calc(var(--s) / 2)); }
+.cube > i:nth-child(5) { transform: rotateX(90deg) translateZ(calc(var(--s) / 2)); }
+.cube > i:nth-child(6) { transform: rotateX(-90deg) translateZ(calc(var(--s) / 2)); }
+@keyframes spin { from { transform: rotateX(0) rotateY(0); } to { transform: rotateX(360deg) rotateY(720deg); } }
+
+/* §5.3 perspective grid floor */
+.grid-floor {
+  position: absolute;
+  left: -50%;
+  right: -50%;
+  bottom: 0;
+  height: 100%;
+  background-image:
+    linear-gradient(rgba(0, 179, 110, .35) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(0, 179, 110, .35) 1px, transparent 1px);
+  background-size: 48px 48px;
+  transform: perspective(600px) rotateX(70deg);
+  transform-origin: center bottom;
+  mask-image: linear-gradient(to top, #000 30%, transparent 90%);
+  -webkit-mask-image: linear-gradient(to top, #000 30%, transparent 90%);
+  animation: floor 1.2s linear infinite;
+  pointer-events: none;
+}
+@keyframes floor { to { background-position: 0 48px; } }
+
+/* §5.8 CRT overlay */
+.crt {
+  position: fixed;
+  inset: 0;
+  z-index: 70;
+  pointer-events: none;
+  background:
+    radial-gradient(ellipse at center, transparent 60%, rgba(0, 0, 0, .55)),
+    repeating-linear-gradient(to bottom, rgba(255, 255, 255, .06) 0 1px, transparent 1px 3px);
+}
+.crt::after {
+  content: "";
+  position: absolute;
+  inset: 0 0 auto;
+  height: 140px;
+  background: linear-gradient(transparent, rgba(0, 255, 156, .05), transparent);
+  animation: scanbar 8s linear infinite;
+}
+@keyframes scanbar { from { transform: translateY(-140px); } to { transform: translateY(100vh); } }
+
+/* §5.9 custom cursor */
+.cursor { display: none; }
+@media (pointer: fine) {
+  html.has-cursor, html.has-cursor * { cursor: none !important; }
+  html.has-cursor .cursor { display: block; }
+}
+.cursor { position: fixed; top: 0; left: 0; z-index: 100; pointer-events: none; will-change: transform; }
+.cursor > span {
+  position: absolute;
+  width: 12px;
+  height: 12px;
+  margin: -6px 0 0 -6px;
+  padding: 0;
+  --corner-len: 4px;
+  --c: var(--green);
+  background-color: transparent;
+  transition: transform .2s var(--ease);
+}
+.cursor > span::after { content: ""; position: absolute; top: 5px; left: 5px; width: 2px; height: 2px; background: var(--green); }
+.cursor.is-hover > span { transform: scale(2.4); }
+
+/* §5.10 boot loader */
+.boot { position: fixed; inset: 0; z-index: 80; background: var(--bg-0); animation: boot-failsafe 0s 6s forwards; }
+.boot.boot-wipe { animation: boot-wipe .4s steps(6) forwards; }
+@keyframes boot-failsafe { to { visibility: hidden; opacity: 0; } }
+@keyframes boot-wipe {
+  0% { clip-path: inset(0); }
+  25% { clip-path: inset(0 0 35% 0); transform: translateX(-8px); }
+  50% { clip-path: inset(40% 0 20% 0); transform: translateX(8px); }
+  75% { clip-path: inset(70% 0 6% 0); transform: translateX(-4px); }
+  100% { clip-path: inset(100% 0 0 0); visibility: hidden; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  .glitch::before, .glitch::after { display: none; }
+  .cube, .cube--inner, .grid-floor, .crt::after, .caret, .pulse-dot { animation: none; }
+  .js .reveal > * { opacity: 1; translate: none; rotate: none; transition: none; }
+  .tilt { transform: none; }
 }

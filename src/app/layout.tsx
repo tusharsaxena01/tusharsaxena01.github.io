@@ -1,20 +1,19 @@
-import type { Metadata } from "next";
-import { Inter, JetBrains_Mono } from "next/font/google";
+import type { Metadata, Viewport } from "next";
+import { JetBrains_Mono, Space_Grotesk } from "next/font/google";
 import "./globals.css";
 
-const inter = Inter({ subsets: ["latin"], variable: "--font-inter" });
-const jetbrainsMono = JetBrains_Mono({
-  subsets: ["latin"],
-  variable: "--font-mono",
-});
+const mono = JetBrains_Mono({ subsets: ["latin"], variable: "--font-mono" });
+const display = Space_Grotesk({ subsets: ["latin"], variable: "--font-display" });
 
 export const metadata: Metadata = {
   title: "Abhi Saxena | Full Stack Developer",
-  icons:{
+  icons: {
     icon: "https://avatars.githubusercontent.com/u/71825717?v=4"
   },
   description: "Systems over Interfaces. Performance is a feature.",
 };
+
+export const viewport: Viewport = { themeColor: "#05070a" };
 
 export default function RootLayout({
   children,
@@ -22,10 +21,12 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
-      <body
-        className={`${inter.variable} ${jetbrainsMono.variable} antialiased bg-slate-950 text-gray-200 selection:bg-sky-500/30 selection:text-sky-200`}
-      >
+    <html lang="en" suppressHydrationWarning>
+      <head>
+        {/* Gate reveal-hiding on JS so no-JS visitors still see every section. */}
+        <script dangerouslySetInnerHTML={{ __html: "document.documentElement.classList.add('js')" }} />
+      </head>
+      <body className={`${mono.variable} ${display.variable} antialiased`}>
         {children}
       </body>
     </html>
