@@ -2,32 +2,28 @@
 
 import React, { useEffect, useState } from "react";
 import { prefersReducedMotion } from "@/utils/motion";
+import { Chakra } from "./Motifs";
 
 const LINES = [
     "[ OK ] loading kernel",
     "[ OK ] mounting /dev/gpu",
-    "[ OK ] starting network daemon",
+    "[ OK ] loading 22 language packs",
     "[ OK ] resolving host abhi.portfolio",
     "[ OK ] decrypting experience.log",
-    "[ OK ] indexing tech_stack",
     "[ OK ] compiling projects",
     "[ OK ] spawning terminal",
-    "[ OK ] handshake complete",
-    "> welcome, operator.",
+    "[ OK ] namaste, operator",
+    "[ OK ] सिस्टम चालू है",
 ];
 const BAR = 24;
+// Three consecutive bands: an abstract stripe, not a flag.
+const band = (i: number) => (i < BAR / 3 ? "text-saffron" : i < (2 * BAR) / 3 ? "text-white" : "text-green-deep");
 
 export const BootLoader = ({ onDone }: { onDone: () => void }) => {
     const [shown, setShown] = useState(0);
     const [phase, setPhase] = useState<"boot" | "wipe" | "gone">("boot");
 
     useEffect(() => {
-        let seen = false;
-        try {
-            seen = sessionStorage.getItem("booted") === "1";
-            sessionStorage.setItem("booted", "1");
-        } catch { /* storage blocked: just show the boot */ }
-
         let finished = false;
         const finish = (wipe: boolean) => {
             if (finished) return;
@@ -41,8 +37,8 @@ export const BootLoader = ({ onDone }: { onDone: () => void }) => {
         const id = setInterval(() => {
             setShown(++i);
             if (i >= LINES.length) { clearInterval(id); setTimeout(() => finish(true), 200); }
-        }, 180);
-        if (seen || prefersReducedMotion()) finish(false);
+        }, 190);
+        if (prefersReducedMotion()) finish(false);
 
         const skip = () => finish(true);
         window.addEventListener("keydown", skip);
@@ -61,14 +57,18 @@ export const BootLoader = ({ onDone }: { onDone: () => void }) => {
     return (
         <div className={`boot flex items-center justify-center p-6 ${phase === "wipe" ? "boot-wipe" : ""}`} aria-hidden>
             <div className="w-full max-w-xl text-sm">
+                <Chakra className="spin-2 mb-6 h-12 w-12" />
                 {LINES.slice(0, shown).map((l) => (
-                    <p key={l} className={l.startsWith(">") ? "text-green" : "text-dim"}>
-                        {l.startsWith("[ OK ]") ? <><span className="text-green">[ OK ]</span>{l.slice(6)}</> : l}
+                    <p key={l} className="text-ink">
+                        <span className="text-green">[ OK ]</span>
+                        <span lang={/[ऀ-ॿ]/.test(l) ? "hi" : undefined}>{l.slice(6)}</span>
                     </p>
                 ))}
-                <p className="mt-4 text-green whitespace-pre">
-                    {"█".repeat(filled)}<span className="text-line">{"█".repeat(BAR - filled)}</span>
-                    {" "}{String(Math.round((shown / LINES.length) * 100)).padStart(3, " ")}%
+                <p className="mt-4 whitespace-pre">
+                    {Array.from({ length: BAR }, (_, i) => (
+                        <span key={i} className={i < filled ? band(i) : "text-line"}>█</span>
+                    ))}
+                    <span className="text-marigold">{" "}{String(Math.round((shown / LINES.length) * 100)).padStart(3, " ")}%</span>
                 </p>
                 <p className="meta mt-6">press any key to skip</p>
             </div>

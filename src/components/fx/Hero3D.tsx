@@ -2,6 +2,7 @@
 
 import React, { useEffect, useRef } from "react";
 import { prefersReducedMotion } from "@/utils/motion";
+import { Chakra, Mandala } from "./Motifs";
 
 // CSS 3D wireframe cube (§5.1) inside a Canvas-2D projected point-cloud sphere (§5.2). No WebGL.
 export const Hero3D = () => {
@@ -43,16 +44,18 @@ export const Hero3D = () => {
                 return [c + x1 * R * s, c + y1 * R * s, z2, s];
             });
             ctx.globalAlpha = 1;
-            ctx.strokeStyle = "rgba(0,255,156,.1)";
+            ctx.strokeStyle = "rgba(34,224,127,.15)";
             ctx.lineWidth = 0.5;
             ctx.beginPath();
             nbrs.forEach((ns, i) => ns.forEach((j) => {
                 if (j > i) { ctx.moveTo(proj[i][0], proj[i][1]); ctx.lineTo(proj[j][0], proj[j][1]); }
             }));
             ctx.stroke();
-            ctx.fillStyle = "#00ff9c";
+            // Depth colour: near white, mid marigold, far saffron (dim).
             for (const [x, y, z, s] of proj) {
-                ctx.globalAlpha = 0.15 + 0.85 * (1 - (z + 1) / 2);
+                const near = 1 - (z + 1) / 2;
+                ctx.fillStyle = near > 0.66 ? "#ffffff" : near > 0.33 ? "#ffc21a" : "#ff9933";
+                ctx.globalAlpha = 0.15 + 0.85 * near;
                 const d = 1.8 * s;
                 ctx.fillRect(x - d / 2, y - d / 2, d, d);
             }
@@ -94,6 +97,8 @@ export const Hero3D = () => {
 
     return (
         <div ref={wrapRef} aria-hidden className="relative mx-auto aspect-square w-full max-w-[520px]">
+            <Mandala spin className="absolute -inset-[12%] h-[124%] w-[124%]" />
+            <Chakra strokeWidth={0.4} className="spin-40 absolute inset-[3%] h-[94%] w-[94%] opacity-40" />
             <canvas ref={canvasRef} className="absolute inset-0 h-full w-full" />
             <div className="cube-stage absolute inset-0 flex items-center justify-center">
                 <div className="cube-tilt">
