@@ -41,15 +41,15 @@ export const Telemetry = () => {
     const filled = Math.round(t * BLOCKS);
 
     return (
-        <Section id="telemetry" index="05" title="Telemetry" label="stats --live">
+        <Section id="telemetry" index="05" title="Telemetry" titleHi="टेलीमेट्री" label="stats --live">
             <div ref={ref} className="reveal grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
                 {stats.map((s) => (
                     <div key={s.label} className="frame">
                         <p className="meta">{s.label}</p>
-                        <p className="mt-3 font-display text-4xl text-green tabular-nums">
+                        <p className="mt-3 font-display text-5xl font-bold text-marigold tabular-nums">
                             {String(Math.round(s.value * t)).padStart(String(s.value).length, "0")}
                         </p>
-                        <p className="mt-3 text-xs tracking-tighter text-green-dim" aria-hidden>
+                        <p className="mt-3 text-xs tracking-tighter text-saffron" aria-hidden>
                             {"█".repeat(filled)}<span className="text-line">{"█".repeat(BLOCKS - filled)}</span>
                         </p>
                     </div>

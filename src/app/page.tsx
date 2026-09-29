@@ -16,6 +16,7 @@ import { Backdrop } from "@/components/fx/Backdrop";
 import { Cursor } from "@/components/fx/Cursor";
 import { useKeyboard } from "@/hooks/useKeyboard";
 import { useFx } from "@/hooks/useFx";
+import { LangProvider } from "@/hooks/useLang";
 
 export default function Home() {
   useKeyboard();
@@ -23,7 +24,7 @@ export default function Home() {
   const [booted, setBooted] = useState(false);
 
   return (
-    <>
+    <LangProvider>
       <BootLoader onDone={() => setBooted(true)} />
       <Backdrop />
       <Cursor />
@@ -39,6 +40,6 @@ export default function Home() {
       </main>
       <Footer />
       <BackToTop />
-    </>
+    </LangProvider>
   );
 }

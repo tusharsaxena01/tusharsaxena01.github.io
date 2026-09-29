@@ -4,6 +4,7 @@ import React, { useState } from "react";
 import { usePortfolioData } from "@/hooks/usePortfolioData";
 import { Section } from "../ui/Section";
 import { Typewriter } from "../fx/Typewriter";
+import { Scramble } from "../fx/Scramble";
 
 type Status = "idle" | "submitting" | "success" | "error";
 
@@ -13,7 +14,7 @@ const FIELDS = [
 ] as const;
 
 const inputCls =
-    "w-full border-b border-line bg-transparent py-2 text-ink caret-[var(--green)] placeholder:text-dim focus:border-green-dim focus-visible:outline-none";
+    "w-full border-b border-line bg-transparent py-2 text-ink caret-[var(--saffron)] placeholder:text-dim focus:border-saffron focus-visible:outline-none";
 
 export const Contact = () => {
     const { data } = usePortfolioData();
@@ -46,10 +47,10 @@ export const Contact = () => {
     ];
 
     return (
-        <Section id="contact" index={data.contact.sectionNumber} title={data.contact.title} label={data.contact.subtitle}>
+        <Section id="contact" index={data.contact.sectionNumber} title={data.contact.title} titleHi={data.contact.titleHi} label={data.contact.subtitle} alt>
             <div className="reveal grid gap-10 lg:grid-cols-[1fr_1.2fr]">
                 <div className="frame p-6 sm:p-8">
-                    <span className="frame-label">[ CHANNELS ]</span>
+                    <span className="frame-label"><Scramble en="[ SYS.०६ ]" /></span>
                     <p className="leading-relaxed">{data.contact.description}</p>
                     <ul className="mt-8 space-y-3 text-sm">
                         {links.map((l) => (
@@ -57,10 +58,10 @@ export const Contact = () => {
                                 <a
                                     href={l.href}
                                     {...(l.href.startsWith("http") && { target: "_blank", rel: "noopener noreferrer" })}
-                                    className="group inline-flex gap-2 break-all hover:text-green"
+                                    className="group inline-flex gap-2 break-all text-marigold hover:text-saffron"
                                 >
-                                    <span className="text-green">$</span>
-                                    <span className="text-dim group-hover:text-green">{l.cmd}</span> {l.label}
+                                    <span className="text-marigold">$</span>
+                                    <span className="text-dim group-hover:text-saffron">{l.cmd}</span> {l.label}
                                 </a>
                             </li>
                         ))}
@@ -69,28 +70,28 @@ export const Contact = () => {
                 </div>
 
                 <div className="frame p-6 sm:p-8">
-                    <span className="frame-label">[ TRANSMIT ]</span>
+                    <span className="frame-label"><Scramble en="[ TX.०१ ]" /></span>
                     {status === "success" ? (
                         <p className="text-green" role="status">
-                            <Typewriter text="> transmission received. stand by." keepCursor />
+                            <Typewriter text="> transmission received. dhanyavaad!" keepCursor />
                         </p>
                     ) : (
                         <form onSubmit={handleSubmit} className="space-y-6">
                             {FIELDS.map((f) => (
                                 <label key={f.name} className="block">
-                                    <span className="text-sm"><span className="text-green">&gt;</span> {f.label}:</span>
+                                    <span className="text-sm"><span className="text-marigold">&gt;</span> {f.label}:</span>
                                     <input required id={f.name} name={f.name} type={f.type} placeholder={f.placeholder} className={inputCls} />
                                 </label>
                             ))}
                             <label className="block">
-                                <span className="text-sm"><span className="text-green">&gt;</span> enter_message:</span>
+                                <span className="text-sm"><span className="text-marigold">&gt;</span> enter_message:</span>
                                 <textarea required name="message" rows={5} placeholder="hello! i'd like to discuss..." className={`${inputCls} resize-none`} />
                             </label>
-                            <button type="submit" disabled={status === "submitting"} className="btn text-green disabled:opacity-50">
-                                {status === "submitting" ? "[ TRANSMITTING... ]" : "[ TRANSMIT ]"}
+                            <button type="submit" disabled={status === "submitting"} className="btn btn--primary diya disabled:opacity-50">
+                                {status === "submitting" ? "[ TRANSMITTING... ]" : <Scramble hover en="[ TRANSMIT ]" hi="[ भेजें ]" />}
                             </button>
                             {status === "error" && (
-                                <p className="text-sm text-dim" role="alert">&gt; error: transmission failed. retry or use mail.</p>
+                                <p className="text-sm text-sindoor" role="alert">&gt; error: transmission failed. retry or use mail.</p>
                             )}
                         </form>
                     )}
