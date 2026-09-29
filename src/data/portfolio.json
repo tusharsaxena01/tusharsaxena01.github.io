@@ -26,7 +26,8 @@
                 ],
                 "coffee_level": "Medium-High"
             }
-        }
+        },
+        "nameHi": "अभि सक्सेना"
     },
     "hero": {
         "greeting": "> HELLO_WORLD",
@@ -40,30 +41,33 @@
                 "text": "Download Resume",
                 "href": "/Abhi_s_Resume_May_2026.pdf",
                 "variant": "primary",
-                "download": "Abhi_Saxena_Resume.pdf"
+                "download": "Abhi_Saxena_Resume.pdf",
+                "textHi": "रिज़्यूमे डाउनलोड करें"
             },
             {
                 "text": "Contact Me",
                 "href": "#contact",
-                "variant": "secondary"
+                "variant": "secondary",
+                "textHi": "संपर्क करें"
             }
         ],
-        "terminal": {
-            "initialMessages": [
-                "Initializing profile...",
-                "Loading experience...",
-                "Fetching tech stack...",
-                "Ready."
-            ],
-            "modalMessages": [
-                "Welcome!",
-                "Type 'help' to explore my profile."
-            ]
-        }
+        "phrases": [
+            "> namaste, operator. system chalu ho raha hai...",
+            "> jugaad meets engineering. built to scale.",
+            "> कोड लिखो, भविष्य बनाओ",
+            "> sab set hai. shuru karein?"
+        ],
+        "phrasesHi": [
+            "> नमस्ते! सिस्टम चालू हो रहा है...",
+            "> जुगाड़ और इंजीनियरिंग, साथ-साथ।",
+            "> कोड लिखो, भविष्य बनाओ",
+            "> सब तैयार है। शुरू करें?"
+        ]
     },
     "about": {
         "sectionNumber": "01",
-        "title": "About Me"
+        "title": "About Me",
+        "titleHi": "मेरे बारे में"
     },
     "skills": {
         "sectionNumber": "02",
@@ -125,7 +129,8 @@
                     "Azure DataBricks"
                 ]
             }
-        ]
+        ],
+        "titleHi": "टेक स्टैक"
     },
     "projects": {
         "sectionNumber": "03",
@@ -184,7 +189,8 @@
                 "type": "Academic",
                 "link": "#"
             }
-        ]
+        ],
+        "titleHi": "प्रोजेक्ट्स"
     },
     "experience": {
         "sectionNumber": "04",
@@ -201,13 +207,15 @@
                     "Built dashboards and analytics systems to improve business decision-making."
                 ]
             }
-        ]
+        ],
+        "titleHi": "पेशेवर अनुभव"
     },
     "contact": {
-        "sectionNumber": "05",
+        "sectionNumber": "06",
         "title": "Get In Touch",
         "subtitle": "What's Next?",
-        "description": "I’m open to software engineering roles and impactful projects. Feel free to reach out for opportunities, collaborations, or discussions."
+        "description": "I’m open to software engineering roles and impactful projects. Feel free to reach out for opportunities, collaborations, or discussions.",
+        "titleHi": "संपर्क करें"
     },
     "social": {
         "github": "https://github.com/tusharsaxena01",
@@ -217,16 +225,18 @@
         "commands": {
             "help": [
                 "Available commands:",
-                "  help       - Show this help message",
-                "  about      - Learn more about me",
-                "  skills     - View my technical skills",
-                "  contact    - Get my contact information",
-                "  projects   - List my projects",
-                "  experience - View work experience",
-                "  clear      - Clear the terminal",
-                "  date       - Show current date and time",
-                "  whoami     - Display user information",
-                "  exit       - Close the terminal modal"
+                "  help             - Show this help message",
+                "  about            - Learn more about me",
+                "  status           - Current status as JSON",
+                "  cat mission.txt  - What I'm here to do",
+                "  skills           - View my technical skills",
+                "  contact          - Get my contact information",
+                "  projects         - List my projects",
+                "  experience       - View work experience",
+                "  whoami           - Display user information",
+                "  echo <text>      - Print text",
+                "  date             - Show current date and time",
+                "  clear            - Clear the terminal"
             ],
             "about": [
                 "Hi! I'm Abhi Saxena, a passionate Full Stack Developer.",
@@ -255,6 +265,11 @@
             "experience": [
                 "Work Experience:",
                 "  • Tranzita Systems (2023 - Present) - Software Development Engineer"
+            ],
+            "cat mission.txt": [
+                "Turn manual work into automated systems.",
+                "Ship APIs that stay calm under real traffic.",
+                "Keep it clean, keep it fast. Ekdum solid."
             ]
         }
     },
@@ -262,23 +277,28 @@
         "links": [
             {
                 "name": "About",
-                "href": "#about"
+                "href": "#about",
+                "nameHi": "परिचय"
             },
             {
                 "name": "Skills",
-                "href": "#skills"
+                "href": "#skills",
+                "nameHi": "कौशल"
             },
             {
                 "name": "Projects",
-                "href": "#projects"
+                "href": "#projects",
+                "nameHi": "प्रोजेक्ट्स"
             },
             {
                 "name": "Experience",
-                "href": "#experience"
+                "href": "#experience",
+                "nameHi": "अनुभव"
             },
             {
                 "name": "Contact",
-                "href": "#contact"
+                "href": "#contact",
+                "nameHi": "संपर्क"
             }
         ]
     },

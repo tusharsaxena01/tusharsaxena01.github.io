@@ -1,49 +1,16 @@
-"use client";
-
 import Link from "next/link";
-import FuzzyText from "@/components/ui/FuzzyText";
-import { GridBackground } from "@/components/ui/GridBackground";
+import { Backdrop } from "@/components/fx/Backdrop";
 
 export default function NotFound() {
     return (
-        <main className="min-h-screen relative flex flex-col items-center justify-center bg-slate-950 text-gray-200 overflow-hidden">
-            <GridBackground />
-
-            <div className="relative z-10 flex flex-col items-center justify-center px-4 text-center">
-                <FuzzyText
-                    fontSize="clamp(4rem, 20vw, 12rem)"
-                    fontWeight={900}
-                    color="#38bdf8"
-                    glitchMode={true}
-                    glitchInterval={3000}
-                    glitchDuration={300}
-                    baseIntensity={0.2}
-                    hoverIntensity={0.8}
-                    fuzzRange={40}
-                    className="mb-8"
-                >
-                    404
-                </FuzzyText>
-
-                <h1 className="text-2xl sm:text-3xl md:text-4xl font-bold text-white mb-4 font-mono">
-                    &lt;Page Not Found /&gt;
-                </h1>
-
-                <p className="text-slate-400 text-sm sm:text-base md:text-lg mb-8 max-w-md">
-                    The page you're looking for doesn't exist or has been moved.
-                </p>
-
-                <Link
-                    href="/"
-                    className="px-6 py-3 bg-sky-600 hover:bg-sky-500 text-white font-bold rounded transition-colors font-mono text-sm sm:text-base"
-                >
-                    &lt; Back to Home /&gt;
-                </Link>
-
-                <div className="mt-12 text-slate-600 font-mono text-xs sm:text-sm">
-                    <p>&gt; Error Code: 404</p>
-                    <p>&gt; Status: Not Found</p>
-                </div>
+        <main className="relative flex min-h-screen flex-col items-center justify-center overflow-hidden px-4 text-center">
+            <Backdrop />
+            <div className="relative z-10 flex flex-col items-center">
+                <h1 className="glitch text-[clamp(4rem,20vw,12rem)] font-bold leading-none text-ivory" data-text="404">404</h1>
+                <p className="mt-6 text-lg"><span className="text-marigold">&gt;</span> path not found <span lang="hi" className="text-dim">/ रास्ता नहीं मिला</span></p>
+                <p className="mt-2 max-w-md text-sm text-dim">The page you&apos;re looking for doesn&apos;t exist or has been moved.</p>
+                <Link href="/" className="btn btn--primary diya mt-10">$ cd ~</Link>
+                <p className="meta mt-12">err_code: 404 {"//"} status: not_found</p>
             </div>
         </main>
     );

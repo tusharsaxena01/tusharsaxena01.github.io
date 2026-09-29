@@ -2,108 +2,89 @@
 
 import React, { useEffect, useState } from "react";
 import { cn } from "@/utils/cn";
-import gsap from "gsap";
 import { usePortfolioData } from "@/hooks/usePortfolioData";
+import { useLang } from "@/hooks/useLang";
+import { Scramble } from "../fx/Scramble";
 
 export const Navbar = () => {
     const { data } = usePortfolioData();
-    const [scrolled, setScrolled] = useState(false);
-    const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+    const { lang, setLang } = useLang();
+    const [open, setOpen] = useState(false);
+    const resume = data.hero.cta.find((c) => c.variant === "primary");
+    const logo = data.personal.name.split(" ")[0].toUpperCase();
 
     useEffect(() => {
-        const handleScroll = () => {
-            setScrolled(window.scrollY > 50);
-        };
-        window.addEventListener("scroll", handleScroll);
-        return () => window.removeEventListener("scroll", handleScroll);
-    }, []);
+        document.body.style.overflow = open ? "hidden" : "";
+        return () => { document.body.style.overflow = ""; };
+    }, [open]);
 
-    // Prevent body scroll when mobile menu is open
-    useEffect(() => {
-        if (mobileMenuOpen) {
-            document.body.style.overflow = 'hidden';
-        } else {
-            document.body.style.overflow = 'unset';
-        }
-        return () => {
-            document.body.style.overflow = 'unset';
-        };
-    }, [mobileMenuOpen]);
+    const links = data.navbar.links.map((l) => ({
+        href: l.href,
+        en: `./${l.name.toLowerCase()}`,
+        hi: `./${l.nameHi}`,
+    }));
 
-    const toggleMenu = () => {
-        if (!mobileMenuOpen) {
-            // Scroll to top to ensure menu is properly positioned
-            window.scrollTo({ top: 0, behavior: 'smooth' });
-            setMobileMenuOpen(true);
-            gsap.fromTo(".mobile-menu-item",
-                { x: 50, opacity: 0 },
-                { x: 0, opacity: 1, duration: 0.4, stagger: 0.1, ease: "power2.out" }
-            );
-        } else {
-            gsap.to(".mobile-menu-item", {
-                x: 50, opacity: 0, duration: 0.3, stagger: 0.05, ease: "power2.in",
-                onComplete: () => setMobileMenuOpen(false)
-            });
-        }
-    };
+    const toggle = (
+        <button
+            onClick={() => setLang(lang === "en" ? "hi" : "en")}
+            className="btn px-3 py-2 text-xs"
+            aria-label={lang === "en" ? "हिंदी में देखें" : "View in English"}
+        >
+            [ <span className={cn(lang === "en" ? "text-saffron" : "text-dim")}>EN</span> |{" "}
+            <span lang="hi" className={cn(lang === "hi" ? "text-saffron" : "text-dim")}>हिं</span> ]
+        </button>
+    );
 
     return (
-        <nav
-            className={cn(
-                "fixed top-0 left-0 right-0 z-50 transition-all duration-300 border-b border-transparent",
-                scrolled
-                    ? "bg-slate-950/80 backdrop-blur-md border-slate-800 py-3 sm:py-4"
-                    : "bg-transparent py-4 sm:py-6"
-            )}
-        >
-            <div className="container mx-auto px-4 sm:px-6 flex items-center justify-between">
-                <div className="font-mono font-bold text-lg sm:text-xl tracking-tighter text-sky-400 z-50 relative touch-manipulation">
-                    <a href="/">
-                        &lt;{data.personal.initials} /&gt;
+        <>
+            <header className="fixed inset-x-0 top-0 z-50 border-b border-line bg-[rgba(12,10,18,.75)] backdrop-blur-[8px]">
+                <div className="tricolor" aria-hidden />
+                <nav className="mx-auto flex max-w-[1200px] items-center justify-between gap-4 px-4 py-3 sm:px-6">
+                    <a href="#top" className="glitch font-display text-xl font-bold tracking-wider text-ivory" data-text={`${logo}//OS`}>
+                        {logo}<span className="text-saffron">{"//"}</span>OS
                     </a>
-                </div>
 
-                {/* Desktop Menu */}
-                <ul className="hidden md:flex gap-6 lg:gap-8">
-                    {data.navbar.links.map((item, index) => (
-                        <li key={item.name}>
-                            <a
-                                href={item.href}
-                                className="group flex items-center gap-2 text-sm font-medium text-slate-400 hover:text-white transition-colors"
-                            >
-                                <span className="text-sky-500 opacity-100 group-hover:opacity-0 transition-opacity font-mono text-xs">
-                                    [{item.name.charAt(0).toUpperCase()}]
-                                </span>
-                                {item.name}
-                            </a>
-                        </li>
-                    ))}
-                </ul>
-
-                {/* Mobile Menu Button */}
-                <button
-                    className="md:hidden text-slate-400 z-50 relative focus:outline-none touch-manipulation px-2 py-1 text-sm sm:text-base"
-                    onClick={toggleMenu}
-                >
-                    {mobileMenuOpen ? "Close" : "Menu"}
-                </button>
-
-                {/* Mobile Menu Overlay */}
-                {mobileMenuOpen && (
-                    <div className="fixed top-0 left-0 right-0 bottom-0 bg-slate-950/95 backdrop-blur-xl z-40 flex flex-col items-center justify-center space-y-6 sm:space-y-8 md:hidden overflow-hidden">
-                        {data.navbar.links.map((item) => (
-                            <a
-                                key={item.name}
-                                href={item.href}
-                                className="mobile-menu-item text-xl sm:text-2xl font-bold text-white hover:text-sky-400 transition-colors touch-manipulation"
-                                onClick={() => setMobileMenuOpen(false)}
-                            >
-                                {item.name}
-                            </a>
+                    <ul className="hidden items-center gap-6 text-sm lg:flex">
+                        {links.map((l) => (
+                            <li key={l.href}>
+                                <a href={l.href} className="text-ink transition-colors hover:text-saffron">
+                                    <Scramble hover en={l.en} hi={l.hi} />
+                                </a>
+                            </li>
                         ))}
+                        <li>{toggle}</li>
+                        {resume && (
+                            <li>
+                                <a href={resume.href} download={resume.download} className="btn btn--primary">
+                                    <Scramble hover en="[ RESUME ]" hi="[ रिज़्यूमे ]" />
+                                </a>
+                            </li>
+                        )}
+                    </ul>
+
+                    <div className="flex items-center gap-3 lg:hidden">
+                        {toggle}
+                        <button className="btn px-3 py-2 text-xs" onClick={() => setOpen(!open)} aria-expanded={open} aria-controls="mobile-menu">
+                            {open ? "[ EXIT ]" : "[ MENU ]"}
+                        </button>
                     </div>
-                )}
-            </div>
-        </nav>
+                </nav>
+            </header>
+
+            {/* Sibling of <header>: its backdrop-filter would otherwise trap this fixed overlay inside the bar. */}
+            {open && (
+                <div id="mobile-menu" className="jaali-bg fixed inset-0 z-40 flex flex-col justify-center gap-6 bg-bg-0 px-8 lg:hidden">
+                    <p className="meta">{"// select destination"}</p>
+                    {links.map((l) => (
+                        <a key={l.href} href={l.href} onClick={() => setOpen(false)} className="text-2xl text-ivory hover:text-saffron">
+                            <span className="text-marigold">$</span> cd <Scramble en={l.en} hi={l.hi} />
+                        </a>
+                    ))}
+                    {resume && (
+                        <a href={resume.href} download={resume.download} className="btn btn--primary diya mt-4 self-start">[ RESUME ]</a>
+                    )}
+                </div>
+            )}
+        </>
     );
 };

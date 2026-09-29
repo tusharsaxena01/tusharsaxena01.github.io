@@ -1,21 +1,34 @@
 import type { Config } from "tailwindcss";
 
+const mono = ["var(--font-mono)", "JetBrains Mono", "Fira Code", "ui-monospace", "Menlo", "Consolas", "monospace"];
+
 const config: Config = {
   content: [
-    "./src/pages/**/*.{js,ts,jsx,tsx,mdx}",
     "./src/components/**/*.{js,ts,jsx,tsx,mdx}",
     "./src/app/**/*.{js,ts,jsx,tsx,mdx}",
   ],
   theme: {
     extend: {
       colors: {
-        background: "var(--background)",
-        foreground: "var(--foreground)",
-        primary: "#38bdf8", // Electric Blue
-        secondary: "#10b981", // Emerald Green (as neon green)
+        "bg-0": "var(--bg-0)",
+        "bg-1": "var(--bg-1)",
+        "bg-2": "var(--bg-2)",
+        line: "var(--line)",
+        white: "var(--white)",
+        ivory: "var(--ivory)",
+        ink: "var(--text)",
+        dim: "var(--text-dim)",
+        saffron: "var(--saffron)",
+        marigold: "var(--marigold)",
+        sindoor: "var(--sindoor)",
+        green: { DEFAULT: "var(--green)", deep: "var(--green-deep)" },
+        rani: "var(--rani)",
+        chakra: "var(--chakra)",
       },
       fontFamily: {
-        mono: ["var(--font-geist-mono)", "monospace"], // Placeholder, will update with real fonts
+        mono,
+        sans: mono,
+        display: ["var(--font-display)", "var(--font-deva)", "system-ui", "sans-serif"],
       },
     },
   },

@@ -2,301 +2,128 @@
 
 import React, { useEffect, useRef, useState } from "react";
 import { cn } from "@/utils/cn";
-import gsap from "gsap";
 import { usePortfolioData } from "@/hooks/usePortfolioData";
+import { prefersReducedMotion, sleep } from "@/utils/motion";
+import { Scramble } from "../fx/Scramble";
 
-interface HistoryLine {
-    type: 'command' | 'output' | 'error';
+interface Line {
+    type: "command" | "output" | "error";
     content: string;
 }
 
-interface TerminalProps {
-    initialMessage?: string[];
-    className?: string;
-    isModalOpen?: boolean;
-    onClose?: () => void;
-}
+const PROMPT = "abhi@portfolio:~$";
 
-export const Terminal: React.FC<TerminalProps> = ({
-    initialMessage = ["Welcome to my interactive terminal!", "Type 'help' to see available commands."],
-    className,
-    isModalOpen = false,
-    onClose,
-}) => {
+// Types `autorun` commands when scrolled into view, then hands the prompt to the visitor.
+export const Terminal = ({ autorun = [], className }: { autorun?: string[]; className?: string }) => {
     const { data } = usePortfolioData();
-    const containerRef = useRef<HTMLDivElement>(null);
+    const rootRef = useRef<HTMLDivElement>(null);
     const inputRef = useRef<HTMLInputElement>(null);
     const outputRef = useRef<HTMLDivElement>(null);
-    const [history, setHistory] = useState<HistoryLine[]>([]);
-    const [currentInput, setCurrentInput] = useState("");
-    const [commandHistory, setCommandHistory] = useState<string[]>([]);
-    const [historyIndex, setHistoryIndex] = useState(-1);
-    const [isInitialized, setIsInitialized] = useState(false);
-    const [isActive, setIsActive] = useState(true);
+    const [history, setHistory] = useState<Line[]>([]);
+    const [input, setInput] = useState("");
+    const [ready, setReady] = useState(false);
+    const [past, setPast] = useState<string[]>([]);
+    const [idx, setIdx] = useState(-1);
 
-    // Build commands object from JSON data
-    const commands: Record<string, () => string | string[]> = {
-        help: () => data.terminal.commands.help,
-        about: () => data.terminal.commands.about,
-        skills: () => data.terminal.commands.skills,
-        contact: () => data.terminal.commands.contact,
-        projects: () => data.terminal.commands.projects,
-        experience: () => data.terminal.commands.experience,
-        date: () => new Date().toLocaleString(),
-        whoami: () => data.terminal.commands.whoami as string,
-        clear: () => "",
+    const run = (cmd: string) => {
+        const c = cmd.trim().toLowerCase();
+        if (!c) return;
+        setPast((p) => [...p, cmd]);
+        if (c === "clear") return setHistory([]);
+        const out =
+            c === "date" ? new Date().toLocaleString()
+            : c.startsWith("echo ") ? cmd.trim().slice(5).replace(/^["']|["']$/g, "")
+            : c === "status" ? JSON.stringify(data.personal.bio.currentStatus, null, 2).split("\n")
+            : data.terminal.commands[c];
+        setHistory((h) => [
+            ...h,
+            { type: "command", content: cmd },
+            ...(out === undefined
+                ? [{ type: "error" as const, content: `command not found: ${c}. type 'help'.` }]
+                : [out].flat().map((content) => ({ type: "output" as const, content }))),
+        ]);
     };
 
     useEffect(() => {
-        // Only run once on mount to prevent messages from repeating
-        if (history.length > 0) return;
-
-        let ctx = gsap.context(() => {
-            const tl = gsap.timeline({
-                onComplete: () => setIsInitialized(true),
-            });
-
-            initialMessage.forEach((line, index) => {
-                tl.to({}, {
-                    duration: 0.5,
-                    onStart: () => {
-                        setHistory((prev) => [...prev, { type: 'output', content: line }]);
+        let dead = false;
+        const go = async () => {
+            for (const cmd of autorun) {
+                if (!prefersReducedMotion()) {
+                    for (let n = 1; n <= cmd.length && !dead; n++) {
+                        setInput(cmd.slice(0, n));
+                        await sleep(45 + Math.random() * 40);
                     }
-                });
-            });
-        }, containerRef);
-
-        return () => ctx.revert();
-    }, []); // Empty dependency array to run only once
+                    await sleep(200);
+                }
+                if (dead) return;
+                setInput("");
+                run(cmd);
+            }
+            setReady(true);
+        };
+        const io = new IntersectionObserver(([e]) => {
+            if (e.isIntersecting) { io.disconnect(); go(); }
+        }, { threshold: 0.4 });
+        io.observe(rootRef.current!);
+        return () => { dead = true; io.disconnect(); };
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, []);
 
     useEffect(() => {
-        if (outputRef.current) {
-            outputRef.current.scrollTop = outputRef.current.scrollHeight;
-        }
+        if (outputRef.current) outputRef.current.scrollTop = outputRef.current.scrollHeight;
     }, [history]);
 
-    // Handle ESC key to deactivate terminal or close modal
-    useEffect(() => {
-        const handleEscape = (e: globalThis.KeyboardEvent) => {
-            if (e.key === "Escape") {
-                if (isModalOpen && onClose) {
-                    onClose();
-                } else if (isActive) {
-                    setIsActive(false);
-                    setCurrentInput("");
-                }
-            }
-        };
-
-        window.addEventListener("keydown", handleEscape);
-        return () => window.removeEventListener("keydown", handleEscape);
-    }, [isActive, isModalOpen, onClose]);
-
-    // Handle click outside to deactivate terminal (only when not in modal mode)
-    useEffect(() => {
-        const handleClickOutside = (e: globalThis.MouseEvent) => {
-            if (!isModalOpen && containerRef.current && !containerRef.current.contains(e.target as Node) && isActive) {
-                setIsActive(false);
-                setCurrentInput("");
-            }
-        };
-
-        document.addEventListener("mousedown", handleClickOutside);
-        return () => document.removeEventListener("mousedown", handleClickOutside);
-    }, [isActive, isModalOpen]);
-
-    const executeCommand = (cmd: string) => {
-        const trimmedCmd = cmd.trim().toLowerCase();
-
-        if (trimmedCmd === "") return;
-
-        // Add command to history
-        setHistory(prev => [...prev, { type: 'command', content: cmd }]);
-        setCommandHistory(prev => [...prev, cmd]);
-
-        if (trimmedCmd === "clear") {
-            setHistory([]);
-            return;
-        }
-
-        // Handle exit command to close modal
-        if (trimmedCmd === "exit") {
-            if (isModalOpen && onClose) {
-                onClose();
-            } else {
-                setHistory(prev => [...prev, {
-                    type: 'output',
-                    content: "Exit command only works in modal mode."
-                }]);
-            }
-            return;
-        }
-
-        // Execute command
-        if (commands[trimmedCmd]) {
-            const output = commands[trimmedCmd]();
-            if (Array.isArray(output)) {
-                output.forEach(line => {
-                    setHistory(prev => [...prev, { type: 'output', content: line }]);
-                });
-            } else if (output) {
-                setHistory(prev => [...prev, { type: 'output', content: output }]);
-            }
-        } else {
-            setHistory(prev => [...prev, {
-                type: 'error',
-                content: `Command not found: ${trimmedCmd}. Type 'help' for available commands.`
-            }]);
-        }
-    };
-
-    const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
-        // Stop propagation to prevent page navigation
-        e.stopPropagation();
-
+    const onKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
         if (e.key === "Enter") {
-            executeCommand(currentInput);
-            setCurrentInput("");
-            setHistoryIndex(-1);
-        } else if (e.key === "ArrowUp") {
+            run(input);
+            setInput("");
+            setIdx(-1);
+        } else if (e.key === "ArrowUp" && past.length) {
             e.preventDefault();
-            if (commandHistory.length > 0) {
-                const newIndex = historyIndex < commandHistory.length - 1 ? historyIndex + 1 : historyIndex;
-                setHistoryIndex(newIndex);
-                setCurrentInput(commandHistory[commandHistory.length - 1 - newIndex]);
-            }
+            const i = Math.min(idx + 1, past.length - 1);
+            setIdx(i);
+            setInput(past[past.length - 1 - i]);
         } else if (e.key === "ArrowDown") {
             e.preventDefault();
-            if (historyIndex > 0) {
-                const newIndex = historyIndex - 1;
-                setHistoryIndex(newIndex);
-                setCurrentInput(commandHistory[commandHistory.length - 1 - newIndex]);
-            } else {
-                setHistoryIndex(-1);
-                setCurrentInput("");
-            }
+            const i = idx - 1;
+            setIdx(Math.max(i, -1));
+            setInput(i >= 0 ? past[past.length - 1 - i] : "");
         }
     };
 
-    const focusInput = (e: React.MouseEvent) => {
-        e.stopPropagation();
-        if (!isActive) {
-            setIsActive(true);
-        }
-        setTimeout(() => {
-            inputRef.current?.focus();
-        }, 0);
-    };
-
-    const handleClose = (e: React.MouseEvent) => {
-        e.stopPropagation();
-        if (onClose) {
-            onClose();
-        }
-    };
-
-    const handleBackdropClick = (e: React.MouseEvent) => {
-        if (e.target === e.currentTarget && onClose) {
-            onClose();
-        }
-    };
-
-    const terminalContent = (
-        <div
-            ref={containerRef}
-            className={cn(
-                "rounded-xl border border-stone-800 bg-stone-950/80 p-2 sm:p-6 shadow-2xl backdrop-blur-sm font-mono text-xs sm:text-sm",
-                isModalOpen && "w-full max-w-4xl mx-auto",
-                className
-            )}
-            onClick={focusInput}
-        >
-            <div className="flex gap-2 mb-3 sm:mb-4 border-b border-slate-800 pb-2 items-center">
-                <div
-                    className="h-2.5 w-2.5 sm:h-3 sm:w-3 rounded-full bg-red-500/80 cursor-pointer hover:bg-red-400 transition-colors touch-manipulation"
-                    onClick={handleClose}
-                    title="Close"
-                />
-                <div
-                    className="h-2.5 w-2.5 sm:h-3 sm:w-3 rounded-full bg-yellow-500/80 cursor-pointer hover:bg-yellow-400 transition-colors touch-manipulation"
-                    onClick={handleClose}
-                    title="Minimize"
-                />
-                <div
-                    className="h-2.5 w-2.5 sm:h-3 sm:w-3 rounded-full bg-green-500/80 cursor-pointer hover:bg-green-400 transition-colors touch-manipulation"
-                    onClick={handleClose}
-                    title="Maximize"
-                />
-                <span className="ml-2 text-xs text-slate-500 flex-1">Interactive Terminal</span>
+    return (
+        <div ref={rootRef} className={cn("frame flex flex-col p-0", className)} onClick={() => inputRef.current?.focus()}>
+            <span className="frame-label"><Scramble en="[ TTY.०१ ]" /></span>
+            <div className="meta flex justify-between border-b border-line px-5 py-3">
+                <span>~/abhi — zsh</span>
+                <span className={ready ? "text-green" : ""}>{ready ? "interactive" : "running"}</span>
             </div>
-
-            <div
-                ref={outputRef}
-                className={cn(
-                    "space-y-1 text-slate-300 overflow-y-auto scrollbar-thin scrollbar-thumb-slate-700 scrollbar-track-transparent",
-                    isModalOpen ? "max-h-[50vh] sm:max-h-[60vh]" : "max-h-64 sm:max-h-96"
+            <div ref={outputRef} className="h-80 space-y-1 overflow-y-auto p-5 text-sm">
+                {history.map((l, i) =>
+                    l.type === "command" ? (
+                        <p key={i} className="break-all"><span className="mr-2 text-marigold">{PROMPT}</span>{l.content}</p>
+                    ) : (
+                        <p key={i} className={cn("whitespace-pre-wrap break-words", l.type === "error" ? "text-sindoor" : "text-ink")}>
+                            {l.content}
+                        </p>
+                    )
                 )}
-            >
-                {history.map((line, i) => (
-                    <div key={i} className="flex flex-col">
-                        {line.type === 'command' ? (
-                            <div className="flex flex-wrap">
-                                <span className="mr-2 text-sky-400 whitespace-nowrap">abhi@portfolio:~$</span>
-                                <span className="text-green-400 break-all">{line.content}</span>
-                            </div>
-                        ) : (
-                            <div className={cn(
-                                "ml-1 break-words",
-                                line.type === 'error' && "text-red-400"
-                            )}>
-                                {line.content}
-                            </div>
-                        )}
-                    </div>
-                ))}
-
-                {isInitialized && isActive && (
-                    <div className="flex items-center flex-wrap">
-                        <span className="mr-2 text-sky-400 whitespace-nowrap">abhi@portfolio:~$</span>
-                        <div className="flex-1 flex items-center min-w-0">
-                            <input
-                                ref={inputRef}
-                                type="text"
-                                value={currentInput}
-                                onChange={(e) => setCurrentInput(e.target.value)}
-                                onKeyDown={handleKeyDown}
-                                className="bg-transparent outline-none text-slate-300 caret-transparent w-full"
-                                style={{ minWidth: `${Math.max(1, currentInput.length)}ch` }}
-                                autoFocus
-                                spellCheck={false}
-                            />
-                            <span className="animate-pulse text-sky-400 ml-0">_</span>
-                        </div>
-                    </div>
-                )}
-
-                {isInitialized && !isActive && (
-                    <div className="flex items-center cursor-pointer hover:text-sky-300 transition-colors mt-4"
-                    >
-                        <span className="mr-2 text-sky-400">&gt;</span>
-                        <span className="animate-pulse mr-2">_</span>
-                        <span className="text-xs text-slate-500 opacity-70">(Click to interact)</span>
-                    </div>
-                )}
+                <label className="flex gap-2">
+                    <span className="shrink-0 text-marigold">{PROMPT}</span>
+                    <input
+                        ref={inputRef}
+                        value={input}
+                        readOnly={!ready}
+                        onChange={(e) => setInput(e.target.value)}
+                        onKeyDown={onKeyDown}
+                        aria-label="Terminal command, type help"
+                        spellCheck={false}
+                        autoComplete="off"
+                        className="min-w-0 flex-1 bg-transparent caret-[var(--saffron)] outline-none focus-visible:outline-none"
+                    />
+                </label>
+                {ready && history.length < 20 && <p className="meta pt-2">{"// click and type 'help'"}</p>}
             </div>
         </div>
     );
-
-    if (isModalOpen) {
-        return (
-            <div
-                className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-4 bg-black/70 backdrop-blur-sm animate-in fade-in duration-200"
-                onClick={handleBackdropClick}
-            >
-                {terminalContent}
-            </div>
-        );
-    }
-
-    return terminalContent;
 };
