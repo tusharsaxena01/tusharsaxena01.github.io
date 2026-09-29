@@ -3,6 +3,7 @@ import portfolioData from '@/data/portfolio.json';
 export interface PortfolioData {
     personal: {
         name: string;
+        nameHi: string;
         initials: string;
         role: string;
         phone: string;
@@ -28,18 +29,22 @@ export interface PortfolioData {
         cta: Array<{
             text: string;
             href: string;
+            textHi: string;
             variant: 'primary' | 'secondary';
             download?: string;
         }>;
         phrases: string[];
+        phrasesHi: string[];
     };
     about: {
         sectionNumber: string;
         title: string;
+        titleHi: string;
     };
     skills: {
         sectionNumber: string;
         title: string;
+        titleHi: string;
         categories: Array<{
             category: string;
             items: string[];
@@ -48,6 +53,7 @@ export interface PortfolioData {
     projects: {
         sectionNumber: string;
         title: string;
+        titleHi: string;
         items: Array<{
             title: string;
             description: string;
@@ -59,6 +65,7 @@ export interface PortfolioData {
     experience: {
         sectionNumber: string;
         title: string;
+        titleHi: string;
         items: Array<{
             company: string;
             role: string;
@@ -69,6 +76,7 @@ export interface PortfolioData {
     contact: {
         sectionNumber: string;
         title: string;
+        titleHi: string;
         subtitle: string;
         description: string;
     };
@@ -83,6 +91,7 @@ export interface PortfolioData {
     navbar: {
         links: Array<{
             name: string;
+            nameHi: string;
             href: string;
         }>;
     };
