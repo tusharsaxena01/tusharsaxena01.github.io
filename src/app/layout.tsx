@@ -1,9 +1,10 @@
 import type { Metadata, Viewport } from "next";
-import { JetBrains_Mono, Space_Grotesk } from "next/font/google";
+import { JetBrains_Mono, Noto_Sans_Devanagari, Rajdhani } from "next/font/google";
 import "./globals.css";
 
 const mono = JetBrains_Mono({ subsets: ["latin"], variable: "--font-mono" });
-const display = Space_Grotesk({ subsets: ["latin"], variable: "--font-display" });
+const display = Rajdhani({ subsets: ["latin", "devanagari"], weight: ["500", "600", "700"], variable: "--font-display" });
+const deva = Noto_Sans_Devanagari({ subsets: ["devanagari"], weight: ["400", "600", "700"], variable: "--font-deva" });
 
 export const metadata: Metadata = {
   title: "Abhi Saxena | Full Stack Developer",
@@ -13,7 +14,7 @@ export const metadata: Metadata = {
   description: "Systems over Interfaces. Performance is a feature.",
 };
 
-export const viewport: Viewport = { themeColor: "#05070a" };
+export const viewport: Viewport = { themeColor: "#0c0a12" };
 
 export default function RootLayout({
   children,
@@ -26,7 +27,7 @@ export default function RootLayout({
         {/* Gate reveal-hiding on JS so no-JS visitors still see every section. */}
         <script dangerouslySetInnerHTML={{ __html: "document.documentElement.classList.add('js')" }} />
       </head>
-      <body className={`${mono.variable} ${display.variable} antialiased`}>
+      <body className={`${mono.variable} ${display.variable} ${deva.variable} antialiased`}>
         {children}
       </body>
     </html>
