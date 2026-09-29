@@ -3,6 +3,7 @@
 import React, { useEffect, useRef, useState } from "react";
 import { cn } from "@/utils/cn";
 import { prefersReducedMotion, sleep } from "@/utils/motion";
+import { graphemes, isDeva } from "@/utils/scramble";
 
 interface TypewriterProps {
     text?: string;
@@ -20,10 +21,10 @@ interface TypewriterProps {
     className?: string;
 }
 
-// Terminal prompts (>, $, //) render in green.
+// Terminal prompts (>, $, //) render in marigold.
 const prompt = (s: string) => {
     const m = s.match(/^(>|\$|\/\/)/);
-    return m ? <><span className="text-green">{m[0]}</span>{s.slice(m[0].length)}</> : s;
+    return m ? <><span className="text-marigold">{m[0]}</span>{s.slice(m[0].length)}</> : s;
 };
 
 export const Typewriter = ({
@@ -52,15 +53,15 @@ export const Typewriter = ({
         const run = async () => {
             await sleep(startDelay);
             for (let i = 0; !dead; i = (i + 1) % list.length) {
-                const p = list[i];
+                const p = graphemes(list[i]);
                 for (let n = 1; n <= p.length && !dead; n++) {
-                    setOut(p.slice(0, n));
+                    setOut(p.slice(0, n).join(""));
                     await sleep(speed + (Math.random() * 2 - 1) * jitter);
                 }
                 if (list.length === 1) break;
                 await sleep(1800);
                 for (let n = p.length - 1; n >= 0 && !dead; n--) {
-                    setOut(p.slice(0, n));
+                    setOut(p.slice(0, n).join(""));
                     await sleep(speed / 3);
                 }
             }
@@ -84,7 +85,7 @@ export const Typewriter = ({
         <span ref={ref} className={cn("relative inline-grid", className)}>
             <span className="sr-only">{list.join(" ")}</span>
             <span aria-hidden className="invisible [grid-area:1/1]">{prompt(longest)}<span>▋</span></span>
-            <span aria-hidden className="[grid-area:1/1]">
+            <span aria-hidden lang={isDeva(out) ? "hi" : undefined} className="[grid-area:1/1]">
                 {prompt(out)}
                 {(!done || keepCursor) && <span className="caret">▋</span>}
             </span>
