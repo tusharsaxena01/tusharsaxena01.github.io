@@ -31,10 +31,7 @@ export interface PortfolioData {
             variant: 'primary' | 'secondary';
             download?: string;
         }>;
-        terminal: {
-            initialMessages: string[];
-            modalMessages: string[];
-        };
+        phrases: string[];
     };
     about: {
         sectionNumber: string;

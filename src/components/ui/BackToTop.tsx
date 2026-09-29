@@ -4,43 +4,24 @@ import React, { useEffect, useState } from "react";
 import { cn } from "@/utils/cn";
 
 export const BackToTop = () => {
-    const [isVisible, setIsVisible] = useState(false);
+    const [visible, setVisible] = useState(false);
 
     useEffect(() => {
-        const handleScroll = () => {
-            setIsVisible(window.scrollY > 500);
-        };
-
-        window.addEventListener("scroll", handleScroll);
-        return () => window.removeEventListener("scroll", handleScroll);
+        const onScroll = () => setVisible(window.scrollY > 500);
+        window.addEventListener("scroll", onScroll, { passive: true });
+        return () => window.removeEventListener("scroll", onScroll);
     }, []);
 
-    const scrollToTop = () => {
-        window.scrollTo({
-            top: 0,
-            behavior: "smooth",
-        });
-    };
-
     return (
-        <button
-            onClick={scrollToTop}
+        <a
+            href="#top"
+            aria-label="Back to top"
             className={cn(
-                "fixed bottom-8 right-8 z-50 p-3 rounded-full bg-slate-800 border border-slate-700 text-sky-400 shadow-lg shadow-sky-500/10 hover:bg-slate-700 hover:text-white transition-all duration-300",
-                isVisible ? "translate-y-0 opacity-100" : "translate-y-20 opacity-0 pointer-events-none"
+                "btn fixed bottom-6 right-6 z-50 px-3 py-2 text-xs text-green transition-opacity",
+                !visible && "pointer-events-none opacity-0"
             )}
-            aria-label="Back to Top"
         >
-            <svg
-                xmlns="http://www.w3.org/2000/svg"
-                fill="none"
-                viewBox="0 0 24 24"
-                strokeWidth={2}
-                stroke="currentColor"
-                className="w-6 h-6"
-            >
-                <path strokeLinecap="round" strokeLinejoin="round" d="M4.5 15.75l7.5-7.5 7.5 7.5" />
-            </svg>
-        </button>
+            ↑ top
+        </a>
     );
 };

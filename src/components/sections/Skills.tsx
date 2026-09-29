@@ -1,84 +1,41 @@
 "use client";
 
-import React, { useRef } from "react";
-import gsap from "gsap";
-import { ScrollTrigger } from "gsap/ScrollTrigger";
-import { useGSAP } from "@gsap/react";
-import Atropos from "atropos/react";
+import React from "react";
 import { usePortfolioData } from "@/hooks/usePortfolioData";
-import { useIsTouchDevice } from "@/hooks/useMediaQuery";
+import { Section } from "../ui/Section";
 
-gsap.registerPlugin(ScrollTrigger);
+// Line icons, one per category in order: frontend, backend, databases, cloud, data.
+const ICONS = [
+    "M3 4h18v12H3zM8 20h8M12 16v4",
+    "M4 4h16v6H4zM4 14h16v6H4zM8 7h.01M8 17h.01",
+    "M4 6c0-1.7 3.6-3 8-3s8 1.3 8 3-3.6 3-8 3-8-1.3-8-3zm0 0v12c0 1.7 3.6 3 8 3s8-1.3 8-3V6M4 12c0 1.7 3.6 3 8 3s8-1.3 8-3",
+    "M7 18a4 4 0 0 1-.6-8A6 6 0 0 1 18 9a4.5 4.5 0 0 1-.5 9z",
+    "M4 20V10M10 20V4M16 20v-7M22 20H2",
+];
 
 export const Skills = () => {
     const { data } = usePortfolioData();
-    const container = useRef(null);
-    const isTouchDevice = useIsTouchDevice();
-
-    useGSAP(() => {
-        gsap.from(".skill-card", {
-            scrollTrigger: {
-                trigger: container.current,
-                start: "top 80%",
-            },
-            y: 100,
-            opacity: 0,
-            duration: 0.8,
-            stagger: 0.2,
-            ease: "power3.out",
-        });
-    }, { scope: container });
 
     return (
-        <section id="skills" ref={container} className="py-16 sm:py-20 px-4 sm:px-6 lg:px-20">
-            <h2 className="text-2xl sm:text-3xl font-bold mb-12 sm:mb-16 flex items-center gap-3 sm:gap-4 text-white">
-                <span className="text-sky-500 font-mono text-lg sm:text-xl">{data.skills.sectionNumber}.</span>
-                {data.skills.title}
-            </h2>
-
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8">
-                {data.skills.categories.map((skill, index) => (
-                    isTouchDevice ? (
-                        // Render without Atropos on touch devices to prevent scroll blocking
-                        <div key={index} className="skill-card h-full">
-                            <div className="h-full p-6 sm:p-8 rounded-xl border border-slate-800 bg-slate-900/50 hover:border-sky-500/50 transition-colors backdrop-blur-sm group">
-                                <h3 className="text-lg sm:text-xl font-bold text-sky-400 mb-4 sm:mb-6 font-mono">
-                                    {`> ${skill.category}`}
-                                </h3>
-                                <div className="flex flex-wrap gap-2 sm:gap-3">
-                                    {skill.items.map((item) => (
-                                        <span
-                                            key={item}
-                                            className="px-2.5 sm:px-3 py-1 bg-slate-800 rounded text-xs sm:text-sm text-slate-300 border border-slate-700 hover:border-sky-500/30 hover:text-sky-300 transition-colors cursor-default"
-                                        >
-                                            {item}
-                                        </span>
-                                    ))}
-                                </div>
+        <Section id="skills" index={data.skills.sectionNumber} title={data.skills.title} label="stack">
+            <div className="reveal grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+                {data.skills.categories.map((s, i) => (
+                    <div key={s.category}>
+                        <article className="frame tilt group h-full">
+                            <div className="flex items-start justify-between">
+                                <span className="meta text-green-dim">[ {String(i + 1).padStart(2, "0")} ]</span>
+                                <svg viewBox="0 0 24 24" className="h-7 w-7 text-green" fill="none" stroke="currentColor" strokeWidth={1.5} strokeLinecap="round" strokeLinejoin="round" aria-hidden>
+                                    <path d={ICONS[i % ICONS.length]} />
+                                </svg>
                             </div>
-                        </div>
-                    ) : (
-                        // Render with Atropos on non-touch devices
-                        <Atropos key={index} className="skill-card h-full" highlight={false} shadow={false}>
-                            <div className="h-full p-6 sm:p-8 rounded-xl border border-slate-800 bg-slate-900/50 hover:border-sky-500/50 transition-colors backdrop-blur-sm group">
-                                <h3 className="text-lg sm:text-xl font-bold text-sky-400 mb-4 sm:mb-6 font-mono" data-atropos-offset="5">
-                                    {`> ${skill.category}`}
-                                </h3>
-                                <div className="flex flex-wrap gap-2 sm:gap-3" data-atropos-offset="2">
-                                    {skill.items.map((item) => (
-                                        <span
-                                            key={item}
-                                            className="px-2.5 sm:px-3 py-1 bg-slate-800 rounded text-xs sm:text-sm text-slate-300 border border-slate-700 hover:border-sky-500/30 hover:text-sky-300 transition-colors cursor-default"
-                                        >
-                                            {item}
-                                        </span>
-                                    ))}
-                                </div>
-                            </div>
-                        </Atropos>
-                    )
+                            <h3 className="glitch glitch--hover mt-6 text-xl" data-text={s.category}>{s.category}</h3>
+                            <ul className="mt-4 flex flex-wrap gap-2">
+                                {s.items.map((item) => <li key={item} className="chip">{item}</li>)}
+                            </ul>
+                        </article>
+                    </div>
                 ))}
             </div>
-        </section>
+        </Section>
     );
 };

@@ -48,18 +48,12 @@
                 "variant": "secondary"
             }
         ],
-        "terminal": {
-            "initialMessages": [
-                "Initializing profile...",
-                "Loading experience...",
-                "Fetching tech stack...",
-                "Ready."
-            ],
-            "modalMessages": [
-                "Welcome!",
-                "Type 'help' to explore my profile."
-            ]
-        }
+        "phrases": [
+            "> software development engineer @ tranzita",
+            "> turning messy data into clean pipelines",
+            "> scalable apis. secure auth. zero panic.",
+            "> welcome, operator."
+        ]
     },
     "about": {
         "sectionNumber": "01",
@@ -204,7 +198,7 @@
         ]
     },
     "contact": {
-        "sectionNumber": "05",
+        "sectionNumber": "06",
         "title": "Get In Touch",
         "subtitle": "What's Next?",
         "description": "I’m open to software engineering roles and impactful projects. Feel free to reach out for opportunities, collaborations, or discussions."
@@ -219,14 +213,14 @@
                 "Available commands:",
                 "  help       - Show this help message",
                 "  about      - Learn more about me",
+                "  status     - Current status as JSON",
                 "  skills     - View my technical skills",
                 "  contact    - Get my contact information",
                 "  projects   - List my projects",
                 "  experience - View work experience",
-                "  clear      - Clear the terminal",
-                "  date       - Show current date and time",
                 "  whoami     - Display user information",
-                "  exit       - Close the terminal modal"
+                "  date       - Show current date and time",
+                "  clear      - Clear the terminal"
             ],
             "about": [
                 "Hi! I'm Abhi Saxena, a passionate Full Stack Developer.",
