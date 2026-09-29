@@ -8,7 +8,7 @@ export const Cursor = () => {
     const ref = useRef<HTMLDivElement>(null);
 
     useEffect(() => {
-        if (!window.matchMedia("(pointer: fine)").matches) return;
+        if (!window.matchMedia("(pointer: fine)").matches || window.innerWidth < 768) return;
         const root = document.documentElement;
         root.classList.add("has-cursor");
         const el = ref.current!;

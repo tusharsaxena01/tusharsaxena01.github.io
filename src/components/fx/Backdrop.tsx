@@ -3,10 +3,11 @@
 import React, { useEffect, useRef } from "react";
 import { prefersReducedMotion } from "@/utils/motion";
 
-const GLYPHS = "アイウエオカキクケコサシスセソタチツテトナニヌネノハヒフヘホ0123456789ABCDEF";
+const GLYPHS = Array.from("कखगघचछजझटठडढणतथदधनपफबभमयरलवशषसहअआइईउए०१२३४५६७८९0123456789ABCDEF");
 const FS = 16;
+const EMBER_COLORS = ["#ffc21a", "#ff9933", "#ffffff"];
 
-// Fixed full-page layers: matrix code rain (§5.4), depth particles (§5.5), CRT overlay (§5.8).
+// Fixed full-page layers: Devanagari code rain (§5.4), rising embers (§5.5), CRT overlay (§5.8).
 export const Backdrop = () => {
     const rainRef = useRef<HTMLCanvasElement>(null);
     const dustRef = useRef<HTMLCanvasElement>(null);
@@ -19,8 +20,12 @@ export const Backdrop = () => {
         const mobile = window.innerWidth < 768;
         let w = 0, h = 0, drops: number[] = [], speeds: number[] = [];
 
-        const particles = Array.from({ length: mobile ? 40 : 90 }, (_, i) => ({
-            x: Math.random(), y: Math.random(), depth: [0.15, 0.4, 0.8][i % 3],
+        const embers = Array.from({ length: mobile ? 40 : 90 }, (_, i) => ({
+            x: Math.random(),
+            y: Math.random(),
+            depth: [0.2, 0.45, 0.8][i % 3],
+            phase: Math.random() * Math.PI * 2,
+            color: Math.random() < 0.08 ? "#ff2f92" : EMBER_COLORS[i % 3],
         }));
 
         const resize = () => {
@@ -28,7 +33,8 @@ export const Backdrop = () => {
             for (const c of [rain, dust]) { c.width = w * dpr; c.height = h * dpr; }
             rc.setTransform(dpr, 0, 0, dpr, 0, 0);
             dc.setTransform(dpr, 0, 0, dpr, 0, 0);
-            rc.font = `${FS}px monospace`;
+            // next/font renames families, so read the real one off the CSS variable.
+            rc.font = `${FS}px ${getComputedStyle(document.body).getPropertyValue("--font-deva") || "sans-serif"}`;
             const n = Math.ceil(w / FS);
             drops = Array.from({ length: n }, () => Math.random() * -h / FS);
             speeds = Array.from({ length: n }, () => 0.4 + Math.random() * 0.6);
@@ -36,12 +42,12 @@ export const Backdrop = () => {
         resize();
         window.addEventListener("resize", resize);
 
-        let raf = 0, last = 0, drift = 0;
+        let raf = 0, last = 0;
         const loop = (t: number) => {
             raf = requestAnimationFrame(loop);
             if (document.hidden) return;
 
-            // Rain at ~30fps: fade old glyphs out, demote the previous head, draw the new bright head.
+            // Rain at ~30fps: fade old glyphs out, demote the previous head, draw a bright ivory head.
             if (t - last > 33) {
                 last = t;
                 rc.globalCompositeOperation = "destination-out";
@@ -52,25 +58,25 @@ export const Backdrop = () => {
                     const prev = Math.floor(d), next = Math.floor(d + speeds[i]);
                     if (next !== prev) {
                         const ch = () => GLYPHS[(Math.random() * GLYPHS.length) | 0];
-                        rc.fillStyle = "#00b36e";
+                        rc.fillStyle = i % 6 === 0 ? "#22e07f" : "#ff9933";
                         rc.fillText(ch(), i * FS, prev * FS);
-                        rc.fillStyle = "#b8ffe0";
+                        rc.fillStyle = "#f6efe3";
                         rc.fillText(ch(), i * FS, next * FS);
                     }
                     drops[i] = next * FS > h && Math.random() > 0.975 ? Math.random() * -20 : d + speeds[i];
                 });
             }
 
-            // Particles: three depth layers with scroll parallax.
-            drift += 0.0002;
+            // Embers: rise, sway and twinkle; three depth layers with scroll parallax.
             dc.clearRect(0, 0, w, h);
-            const sy = window.scrollY;
-            for (const p of particles) {
-                const y = ((((p.y - drift * p.depth) * h - sy * p.depth) % h) + h) % h;
-                dc.globalAlpha = 0.15 + p.depth * 0.5;
-                dc.fillStyle = "#cfe8dc";
-                const r = 0.6 + p.depth * 1.4;
-                dc.fillRect(p.x * w, y, r, r);
+            const sy = window.scrollY, s = t / 1000;
+            for (const p of embers) {
+                const y = ((((p.y - s * 0.02 * p.depth) * h - sy * p.depth) % h) + h) % h;
+                const x = p.x * w + Math.sin(s * 0.8 + p.phase) * 12 * p.depth;
+                dc.globalAlpha = (0.2 + p.depth * 0.6) * (0.6 + 0.4 * Math.sin(s * 3 + p.phase));
+                dc.fillStyle = p.color;
+                const r = 0.6 + p.depth * 1.6;
+                dc.fillRect(x, y, r, r);
             }
         };
         raf = requestAnimationFrame(loop);
