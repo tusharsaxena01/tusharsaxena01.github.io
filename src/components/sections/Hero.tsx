@@ -42,8 +42,8 @@ export const Hero = ({ booted }: { booted: boolean }) => {
                             <Typewriter text={data.personal.name} speed={70} jitter={30} start={booted} onDone={() => setTyped(true)} />
                         )}
                     </h1>
-                    <p lang="hi" className="glitch deva-display mt-3 text-2xl text-saffron opacity-60" data-text="भविष्य बनाओ">
-                        भविष्य बनाओ
+                    <p lang="hi" className="glitch deva-display mt-3 text-2xl text-saffron opacity-60" data-text={data.personal.role}>
+                        {data.personal.role}
                     </p>
 
                     <p className="mt-6 text-base sm:text-lg">
